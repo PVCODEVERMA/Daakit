@@ -1,0 +1,71 @@
+/*------ Media object ------*/
+
+.media {
+	margin-block-start: 15px;
+	zoom: 1;
+	overflow: hidden;
+}
+.media-body {
+	zoom: 1;
+	overflow: hidden;
+}
+.media-object {
+	display: block;
+}
+.media img {
+	width: 40px;
+	height: 40px;
+}
+.media-right, .media>.pull-right {
+	padding-left: 10px;
+}
+.media-body, .media-left, .media-right {
+	display: table-cell;
+	vertical-align: top;
+}
+.media-left, .media>.pull-left {
+	padding-inline-end: 10px;
+}
+.media-heading {
+	margin-block-start: 0;
+	margin-block-end: 5px;
+}
+.media-body h4 {
+	font-weight: 600;
+	font-size: 16px;
+}
+.media-middle {
+	vertical-align: middle;
+}
+.media-bottom {
+	vertical-align: bottom;
+}
+.media-left, .media>.pull-left {
+	padding-inline-end: 10px;
+}
+
+.product-grid6 .product-image6 {
+    overflow: hidden;
+    text-align: center;
+}
+.payment-icon {
+	&.active {
+		svg {
+			fill: $custom-white;
+		}
+	}
+	&:not(.active) {
+		background-color: $background;
+		&:hover {
+			color: #{$primary};
+			svg {
+				fill: #{$primary};
+			}
+		}
+	}
+	svg {
+		fill: $default-color;
+		margin-block-end: 3px;
+		margin-inline-end: 3px;
+	}
+}

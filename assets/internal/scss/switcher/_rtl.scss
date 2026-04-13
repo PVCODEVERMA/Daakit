@@ -1,0 +1,163 @@
+[dir="rtl"] {
+    .dropdown-menu {
+		--bs-position: end;
+		float: right;
+		text-align: right;
+	}
+    [type=email], [type=number], [type=tel], [type=url] {
+        direction: rtl;
+    }
+    .select2-dropdown {
+        direction: ltr !important;
+        text-align: end;
+    }
+    .ps__rail-y {
+        left: 0 !important;
+        right: auto !important;
+    }
+    
+    .ps__thumb-y {
+        left: 1px;
+        right: inherit;
+    }
+    .sidebar.sidebar-right {
+        transform: translate(-100%,0);
+    }
+
+    .sidebar.sidebar-right.sidebar-open {
+        transform: translate(0, 0);
+    }
+    .mCSB_inside>.mCSB_container {
+        margin-inline-start: 80px;
+        margin-inline-end: 0;
+    }
+    .mCSB_scrollTools {
+        inset-inline-start: 0;
+        inset-inline-end: auto;
+    }
+
+    .nvd3 text {
+        text-anchor: start !important;
+    }
+
+    .nvd3 .nv-legend-text {
+        text-anchor: end !important;
+    }
+
+    .c3 text {
+        text-anchor: start !important;
+    }
+
+    .apexcharts-legend-marker {
+        margin-inline-end: 3px !important;
+    }
+    .carousel-control-prev {
+        left: 0;
+        right: inherit;
+    }
+    .carousel-control-next {
+        right: 0;
+        left: inherit;
+    }
+    .buynow .modal-dialog .btn-close {
+        left: 33px;
+        right: inherit;
+    }
+    .fa-angle-right:before {
+        content: "\f104";
+    }
+    .fa-angle-left:before {
+        content: "\f105";
+    }
+    .fa-angle-double-left:before {
+        content: "\f101";
+    }
+    .fa-angle-double-right:before {
+        content: "\f100";
+    }
+    .fa-arrow-right:before {
+        content: "\f060";
+    }
+    .fa-arrow-left:before {
+        content: "\f061";
+    }
+    .lg-actions {
+        .lg-next:before {
+            content: "\e094";
+        }
+        .lg-prev:after {
+            content: "\e095";
+        }
+    } 
+    .lnr-chevron-left:before {
+        content: "\e876";
+    }
+    .tab_wrapper .content_wrapper .accordian_header .arrow {
+        float: left;
+        transform: rotate(135deg);
+    }
+    .tab_wrapper .content_wrapper .accordian_header.active .arrow {
+        transform: rotate(315deg);
+        margin-block-start: 5px;
+    }
+    .apexcharts-toolbar { 
+        left: 3px;
+        right: inherit !important;
+    }
+    .ti-arrow-circle-right:before {
+        content: "\e65e";
+    }
+    .cbp_tmtimeline {
+      
+        > li {
+      
+          .cbp_tmlabel {
+      
+            &:after {
+                transform: rotate(180deg);
+            }
+          }
+        }
+    }
+    .dropdown-menu-arrow:before {
+        border-inline-end: 1px solid $border;
+        border-block-end: 0px solid $border;
+        border-inline-start: 0px solid $border;
+    }
+    .apexcharts-menu {
+        right: inherit !important;
+        left: 10px !important;
+    }
+    @media (max-width: 345px) {
+        .mCSB_inside > .mCSB_container {
+            margin-inline-start: 55px;
+            margin-inline-end: inherit !important;
+        }
+    }
+    .fe-arrow-right:before {
+        content: "\e90f";
+    }
+    #echart1{
+        direction: ltr;
+    }
+    .ui-datepicker .ui-datepicker-header, .ui-datepicker-next  .ui-datepicker-prev{
+        direction: ltr;
+    }
+    .joinc {
+        transform: rotate(180deg);
+    }
+    .dTree .plus {
+        transform: rotate(180deg);
+    }
+}
+
+@media (min-width: 992px) {
+    [dir="rtl"][data-layout=horizontal] {
+        .main-sidemenu i.angle {
+            transform: rotate(270deg) !important;
+        }
+        .main-sidemenu .slide.is-expanded i.angle {
+            transform: rotate(90deg) !important;
+        }
+    } 
+}

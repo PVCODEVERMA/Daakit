@@ -1,0 +1,145 @@
+.footer {
+	padding-block: 1.25rem;
+	padding-inline-start: 14.375rem;
+	padding-inline-end: 0;
+	background: $white;
+	border-block-start: 1px solid transparant;
+	font-size: 0.875rem;
+	padding: 1.25rem 0;
+	border-block-start: 1px solid #{$border};
+	color: $default-color;
+	.container {
+		width: 100%;
+		padding-inline: 0.75rem;
+		margin-inline: auto;
+	}
+	.social {
+		.social-icon {
+			width: 30px;
+			height: 30px;
+			display: block;
+			border: 1px solid $primary-03;
+			line-height: 30px;
+			border-radius: 50%;
+		}
+	}
+}
+
+#footer, .fc-toolbar .ui-button, .fileinput .thumbnail {
+	text-align: center;
+}
+.four-zero {
+	text-align: center;
+	footer>a {
+		text-align: center;
+	}
+}
+.ie-warning, .login-content, .login-navigation {
+	text-align: center;
+}
+.pt-inner {
+	text-align: center;
+	.pti-footer>a {
+		text-align: center;
+	}
+}
+.top-footer {
+	width: 100%;
+	line-height: 1.25rem;
+	opacity: 1;
+	transform: translate(0px, 0px);
+	font-size: 0.875rem;
+	flex: 0 0 auto;
+	h6 {
+		font-size: 0.875rem;
+		margin-block-end: 1rem;
+		font-weight: 600;
+	}
+	p {
+		color: #9493a9;
+	}
+	a {
+		color: #9493a9;
+		line-height: 2;
+		color: #9493a9;
+		line-height: 2;
+		address {
+			color: #9493a9;
+			margin-block-end: 0;
+			line-height: 2;
+		}
+	}
+	img {
+		width: 5rem;
+		border: 1px solid $border;
+		padding: 2px;
+		height: 5rem;
+		&:hover {
+			color: #8e9090;
+			opacity: .6;
+		}
+	}
+	.list-unstyled li {
+		margin-block-end: 0;
+	}
+}
+.footer-payments {
+	padding-inline-start: 0;
+	list-style: none;
+	margin: 0;
+	line-height: 1.25rem;
+	li {
+		&:not(:last-child) {
+			margin-inline-end: 1.5rem;
+		}
+		display: inline-block;
+	}
+	a {
+		color: #a7a8c7;
+		text-decoration: none;
+		font-size: 2rem;
+		&:hover {
+			opacity: .9;
+		}
+	}
+}
+.main-footer {
+	padding-block: 1.25rem;
+	padding-inline-start: 25rem;
+	padding-inline-end: 1.875rem;
+	font-size: 0.875rem;
+	font-weight: 400;
+	background-color: $white;
+	border-block-start: 1px solid $border;
+}
+.footer-social-list {
+	li {
+		display: inline-block;
+	}
+	a {
+		color: #9493a9;
+		text-decoration: none;
+		font-size: 1rem;
+	}
+	padding-inline-start: 0;
+	list-style: none;
+	margin: 0;
+	line-height: 1.25rem;
+}
+
+.footer .social ul li {
+    display: inline-block;
+    padding: 7px;
+}
+@media(min-width:992px) {
+	.sidebar-mini footer.footer {
+        padding-block: 1.25rem;
+        padding-inline-end: 1.25rem;
+        padding-inline-start: 270px;
+    }
+	.sidebar-mini.sidenav-toggled footer.footer {
+        padding-block: 1.25rem;
+        padding-inline-end: 1.25rem;
+        padding-inline-start: 80px;
+    }
+}

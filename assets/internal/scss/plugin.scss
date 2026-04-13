@@ -1,0 +1,133 @@
+/*==========================================================================================================================================
+Project                        :   Solic - Laravel Bootstrap 5 Admin Template
+==========================================================================================================================================
+Updated Date                    :   05/10/2023
+------------------------------------------------------------------------------------------------------------------------------------------
+Author & Copyright Ownership   :   Spruko Technologies Private Limited 
+------------------------------------------------------------------------------------------------------------------------------------------
+Author URL                     :   https://themeforest.net/user/spruko
+------------------------------------------------------------------------------------------------------------------------------------------
+Support		                   :   https://support.spruko.com/
+------------------------------------------------------------------------------------------------------------------------------------------
+License Details                :   https://spruko.com/licenses-details
+------------------------------------------------------------------------------------------------------------------------------------------*/
+
+@import "variables";
+
+/*
+1.   Accordion
+2.   Bootstrap-datepicker
+3.   Clndr
+4.   Charts-nvd3
+5.   Classic
+6.   Nano
+7.   Monolith
+8.   Countdown
+9.   Countdown
+10.  Daterangepicker
+11.  DataTables.bootstrap5
+12.  Responsive.bootstrap
+13.  Buttons.bootstrap5
+14.  Date-picker
+15.  Spectrum
+16.  Dtree
+17.  Fancy_fileupload
+18.  Fileupload
+19.  Form-wizard
+20.  Smart_wizard_theme_dots
+21.  Fullcalendar
+22.  Gallery
+23.  IntlTelInput
+24.  Ion.rangeSlider
+25.  Ion.rangeSlider.skinFlat
+26.  Jquerycountdown
+27.  Jqvmap
+28.  Monolith.min
+29.  Nano.min
+30.  Flatpickr
+31.  Fullcalendar
+32.  Gallery
+33.  Jquery.growl
+34.  Jquery.timepicker
+35.  Jquery.transfer
+36.  Jquery-ui
+37.  Jvector-map
+38.  Leaflet
+39.  Morris
+40.  Multi
+41.  Multiple-select
+42.  NotifIt
+43.  Owl.carousel
+43.  Quill.snow
+44.  Richtext
+45.  Jquery.mCustomScrollbar
+46.  Select2.min
+47.  Selectize
+48.  Smart_wizard
+49.  Smart_wizard_theme_arrows
+50.  Smart_wizard_theme_circles
+51.  Smart_wizard_theme_dots
+52.  Star-rating-svg
+53.  Summernote
+54.  Sweetalert
+55.  Tabs
+56.  Jquerytimepicker
+57.  Treeview
+*/
+
+/* ###### plugins ####### */
+@import "plugins/accordion/accordion";
+@import "plugins/bootstrap_datepicker/bootstrap-datepicker";
+@import "plugins/calendar/clndr";
+@import "plugins/charts-nvd3/charts-nvd3";
+@import "plugins/color-picker/classic";
+@import "plugins/color-picker/nano";
+@import "plugins/color-picker/monolith";
+@import "plugins/countdown/countdown";
+@import "plugins/count_down/countdown";
+@import "plugins/datarangepicker/daterangepicker";
+@import "plugins/data-table/dataTables.bootstrap5";
+@import "plugins/data-table/responsive.bootstrap";
+@import "plugins/data-table/buttons.bootstrap5";
+@import "plugins/date-picker/date-picker";
+@import "plugins/date-picker/spectrum";
+@import "plugins/dtree/dtree";
+@import "plugins/fileupload/fancy_fileupload";
+@import "plugins/fileupload/fileupload";
+@import "plugins/formwizard/form-wizard";
+@import "plugins/formwizard/smart_wizard_theme_dots";
+@import "plugins/fullcalendar/fullcalendar";
+@import "plugins/gallery/gallery";
+@import "plugins/inetlinput/intlTelInput";
+@import "plugins/ion.rangeSlider/ion.rangeSlider";
+@import "plugins/ion.rangeSlider/ion.rangeSlider.skinFlat";
+@import "plugins/jquery-countdown/jquerycountdown";
+@import "plugins/jqvmap/jqvmap";
+@import "plugins/jquery.growl/jquery.growl";
+@import "plugins/jquery_timepicker/jquery.timepicker";
+@import "plugins/jquery_transfer/jquery.transfer";
+@import "plugins/jquery_ui/jquery-ui";
+@import "plugins/jvector-map/jvector-map";
+@import "plugins/leaflet/leaflet";
+@import "plugins/morris/morris";
+@import "plugins/multi/multi";
+@import "plugins/multipleselect/multiple-select";
+@import "plugins/notifIt/notifIt";
+@import "plugins/owl_carousel/owl.carousel";
+@import "plugins/quill/quill.bubble";
+@import "plugins/quill/quill.snow";
+@import "plugins/range-slider/range-slider";
+@import "plugins/richtext/richtext";
+@import "plugins/scroll-bar/jquery.mCustomScrollbar";
+@import "plugins/select.min/select2.min";
+@import "plugins/selectsize/selectize";
+@import "plugins/smart_wizard/smart_wizard";
+@import "plugins/smart_wizard/smart_wizard_theme_arrows";
+@import "plugins/smart_wizard/smart_wizard_theme_circles";
+@import "plugins/smart_wizard/smart_wizard_theme_dots";
+@import "plugins/star-rating-svg/star-rating-svg";
+@import "plugins/summernote/summernote";
+@import "plugins/sweet-alert/sweetalert";
+@import "plugins/tabs/tabs";
+@import "plugins/time-picker/jquerytimepicker";
+@import "plugins/treeview/treeview";

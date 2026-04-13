@@ -1,0 +1,89 @@
+.pagination {
+	display: -ms-flexbox;
+	display: flex;
+	padding-inline-start: 0;
+	list-style: none;
+	border-radius: $card-border-radius;
+}
+.page-link {
+	position: relative;
+	display: block;
+	padding: 0.5rem 0.6rem;
+	margin-inline-start: -1px;
+	line-height: 1.25;
+	background-color: $white;
+	color: $default-color;
+	border: 1px solid $border;
+	&:hover {
+		z-index: 2;
+		text-decoration: none;
+		background-color: #{$primary-005};
+		border-color: $border;
+	}
+	&:focus {
+		z-index: 2;
+		outline: 0;
+		box-shadow: none;
+		background-color: $white;
+	}
+	&:not(:disabled):not(.disabled) {
+		cursor: pointer;
+	}
+}
+.page-item {
+	&:first-child .page-link {
+		margin-inline-start: 0;
+		border-start-start-radius: $card-border-radius;
+		border-end-start-radius: $card-border-radius;
+	}
+	&:last-child .page-link {
+		border-start-end-radius: $card-border-radius;
+		border-end-end-radius: $card-border-radius;
+	}
+	&.active .page-link {
+		z-index: 1;
+		color: $custom-white;
+		border-color: $border;
+	}
+	&.disabled .page-link {
+		color: #ced4da;
+		pointer-events: none;
+		cursor: auto;
+		background-color: $white;
+		border-color: $border;
+	}
+}
+.pagination-lg {
+	.page-link {
+		padding: 0.75rem 1.5rem;
+		font-size: 1.125rem;
+		line-height: 1.5;
+	}
+	.page-item {
+		&:first-child .page-link {
+			border-start-start-radius: $card-border-radius;
+			border-end-start-radius: $card-border-radius;
+		}
+		&:last-child .page-link {
+			border-start-end-radius: $card-border-radius;
+			border-end-end-radius: $card-border-radius;
+		}
+	}
+}
+.pagination-sm {
+	.page-link {
+		padding: 0.25rem 0.5rem;
+		font-size: 0.875rem;
+		line-height: 1.5;
+	}
+	.page-item {
+		&:first-child .page-link {
+			border-start-start-radius: $card-border-radius;
+			border-end-start-radius: $card-border-radius;
+		}
+		&:last-child .page-link {
+			border-start-end-radius: $card-border-radius;
+			border-end-end-radius: $card-border-radius;
+		}
+	}
+}

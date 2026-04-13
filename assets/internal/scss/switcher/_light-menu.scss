@@ -1,0 +1,118 @@
+[data-menu-style="light"] {
+    .app-sidebar {
+        --menu-bg: #fff;
+        --border: #eff0f6;
+        --color: #3c4858;
+    }
+    .app-sidebar__header {
+        background-color: $custom-white;
+    }
+    .mobile-logo, .desktop-logo {
+            display: none;
+    }
+
+    .desktop-logo-dark {
+        display: block;
+    }
+
+    @media (min-width: 992px) {
+        &[data-vertical-style="hover"],
+        &[data-vertical-style="hover1"] {
+            @media (min-width: 992px) {
+                .app.show-sidenav .app-sidebar__header {
+
+                    .desktop-logo {
+                        display: none !important;
+                    }
+
+                    .mobile-logo {
+                        display: none !important;
+                    }
+
+                    .mobile-logo-dark {
+                        display: block !important;
+                    }
+                }
+            }
+        }
+
+        &[data-vertical-style="doublemenu"],
+        &[data-vertical-style="doublemenu-tabs"] {
+            @media (min-width: 992px) {
+            .app-sidebar__header {
+
+                    .desktop-logo {
+                        display: none !important;
+                    }
+
+                    .mobile-logo {
+                        display: none !important;
+                    }
+
+                    .mobile-logo-dark {
+                        display: block !important;
+                    }
+                }
+            }
+        }
+    }
+
+    @media (min-width: 992px) {
+        .sidebar-mini.sidenav-toggled {
+            .mobile-logo {
+                display: none;
+    
+                &.mobile-logo-dark {
+                display: block;
+                }
+            }
+    
+            &.show-sidenav {
+                .desktop-logo {
+                    display: none;
+    
+                    &.desktop-logo-dark {
+                        display: block;
+                    }
+                }
+    
+                .mobile-logo {
+                    display: none;
+                }
+            }
+        }
+    }
+
+    .ps__rail-y.ps--clicking .ps__thumb-y {
+        background-color: rgba(0, 0, 0, 0.3);
+    }
+
+    .ps .ps__rail-y.ps--clicking {
+        background-color: transparent;
+    }
+
+    .ps .ps__rail-y {
+        &:hover, &:focus {
+            background-color: transparent;
+        }
+    }
+
+    .ps__thumb-y {
+        background-color: transparent;
+    }
+
+    @media (min-width: 992px) {
+        &[data-vertical-style="doublemenu-tabs"] {
+            .sidetab-menu {
+                --muted: #a8b1bd;
+                --white: #fff;
+                --gray-200: #f2f4f5;
+                --gray-300: #e6eaeb;
+                --gray-800: #383853;
+                --color: #3c4858;
+                --form-border: #e1e1e1;
+            }
+        }
+    }
+
+}

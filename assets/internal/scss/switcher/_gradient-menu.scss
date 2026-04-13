@@ -1,0 +1,158 @@
+[data-menu-style="gradient"] {
+    .app-sidebar {
+        --menu-bg: linear-gradient(to right, #{$primary} 0%, #C447AF 360%);
+        --border: rgba(255, 255, 255, 0.1);
+        --color: rgba(255, 255, 255, 0.7);
+    }
+    .app-sidebar__header {
+        background-color: #{$primary};
+        border-block-end: 1px solid rgba(255, 255, 255, 0.1);
+        border-inline-end: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    .responsive-logo .main-logo .desktop-logo {
+        display: none;
+
+        &.desktop-logo-dark {
+            display: block;
+        }
+    }
+    .desktop-logo {
+        display: block;
+    }
+    .mobile-logo, .desktop-logo-dark {
+        display: none;
+    }
+    .side-menu__item {
+        color: rgba(255, 255, 255, 0.7);
+        &.active, &:hover, &:focus {
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 0.25rem;
+            color: $custom-white;
+            border-inline-end: 0px;
+        }
+    }
+    .side-menu__icon {
+        color: rgba(255, 255, 255, 0.7);
+        svg {
+            fill: rgba(255, 255, 255, 0.7) !important;
+        }
+    }
+    .slide-item, .sub-side-menu__item, .sub-slide-item2 {
+        color: rgba(255, 255, 255, 0.7);
+        &:hover, &.active, &:focus {
+            color: $custom-white;
+        }
+    }
+    .sub-angle, .sub-angle2 {
+        color: rgba(255, 255, 255, 0.7) !important;
+    }
+    .sub-category h3 {
+        color: rgba(255, 255, 255, 0.5);
+    }
+    @media (min-width: 992px) {
+        .sidebar-mini.sidenav-toggled {
+            .mobile-logo {
+                display: block;
+      
+                &.mobile-logo-dark {
+                display: none;
+                }
+            }
+      
+            &.show-sidenav {
+                .desktop-logo {
+                    display: block;
+      
+                    &.desktop-logo-dark {
+                        display: none;
+                    }
+                }
+      
+                .mobile-logo {
+                    display: none;
+                }
+            }
+        }
+    }
+    .slide-right, .slide-left {
+        svg {
+            fill: #fff;
+            color: #fff;
+        }
+    }
+
+    &[data-vertical-style="hover"],
+    &[data-vertical-style="hover1"] {
+        @media (min-width: 992px) {
+            .app.show-sidenav .app-sidebar__header {
+
+                .desktop-logo {
+                    display: none !important;
+                }
+
+                .mobile-logo {
+                    display: block !important;
+                }
+
+                .mobile-logo-dark {
+                    display: none !important;
+                }
+            }
+        }
+    }
+
+    &[data-vertical-style="doublemenu"],
+    &[data-vertical-style="doublemenu-tabs"] {
+        
+        @media (min-width: 992px) {
+           .app-sidebar__header {
+
+                .desktop-logo {
+                    display: none !important;
+                }
+
+                .mobile-logo {
+                    display: block !important;
+                }
+
+                .mobile-logo-dark {
+                    display: none !important;
+                }
+            }
+        }
+    }
+    @media (min-width: 992px) {
+        &[data-vertical-style=hover1],
+        &[data-vertical-style=doublemenu],
+        &[data-vertical-style=doublemenu-tabs] {
+            .app .side-menu__label1 a {
+                color: #fff !important;
+            }
+        }
+        &[data-vertical-style="doublemenu-tabs"] {
+            .sidetab-menu {
+                --primary-bg-color: rgba(255, 255, 255, 0.1);
+                --muted: rgba(255, 255, 255, 0.5);
+                --black-6: rgba(255, 255, 255, 0.6);
+                --white: transparent;
+                --gray-100: rgba(255, 255, 255, 0.2);
+                --gray-200: transparent;
+                --gray-300: rgba(255, 255, 255, 0.2);
+                --gray-600: #fff;
+                --gray-800: #fff;
+                --form-border: rgba(255, 255, 255, 0.1);
+
+                .btn-light {
+                    &:hover {
+                        color: #182d49;
+
+                    }
+                }
+            }
+            .slide-item, .sub-side-menu__item, .sub-slide-item2 {
+                --color: rgba(255, 255, 255, 0.6);
+            }
+        } 
+    }
+
+}
