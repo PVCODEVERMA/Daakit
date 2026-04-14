@@ -1,0 +1,93 @@
+.countdown-timer-wrapper {
+	border-radius: 5px;
+	margin-block-end: 20px;
+	max-width: 500px;
+	margin: 30px auto;
+	h5 {
+		font-size: 14px;
+		letter-spacing: 0.5px;
+		text-align: center;
+		padding-block-start: 10px;
+		text-shadow: none;
+	}
+	.timer {
+		padding: 10px;
+		text-align: center;
+		padding-block-start: 15px;
+		.timer-wrapper {
+			display: inline-block;
+			width: 110px;
+			height: 50px;
+			.time {
+				font-size: 35px;
+				font-weight: bold;
+				color: #fff;
+				width: 80px;
+				height: 80px;
+				border-radius: 0;
+				background: #564ec1;
+				line-height: 2.3;
+				text-align: center;
+				margin: 0 auto;
+				margin-block-end: 5px;
+				position: relative;
+				overflow: hidden;
+				border-radius: 3px;
+				&:before {
+					content: '';
+					background-repeat: no-repeat;
+					position: absolute;
+					width: 100%;
+					height: 100%;
+					inset-inline-end: -15px;
+				}
+			}
+			.text {
+				font-size: 20px;
+				color: #121029;
+				padding-block-start: 4px;
+			}
+		}
+	}
+}
+#jquery-script-menu {
+	position: fixed;
+	height: 90px;
+	width: 100%;
+	inset-block-start: 0;
+	inset-inline-start: 0;
+	border-block-start: 5px solid #316594;
+	background: #fff;
+	-moz-box-shadow: 0 2px 3px 0px rgba(0, 0, 0, 0.16);
+	-webkit-box-shadow: 0 2px 3px 0px rgba(0, 0, 0, 0.16);
+	box-shadow: 0 2px 3px 0px rgba(0, 0, 0, 0.16);
+	z-index: 999999;
+	padding: 10px 0;
+	-webkit-box-sizing: content-box;
+	-moz-box-sizing: content-box;
+	box-sizing: content-box;
+}
+.jquery-script-center {
+	width: 960px;
+	margin: 0 auto;
+	ul {
+		width: 212px;
+		float: start;
+		line-height: 45px;
+		margin: 0;
+		padding: 0;
+		list-style: none;
+	}
+	a {
+		text-decoration: none;
+	}
+}
+.jquery-script-ads {
+	width: 728px;
+	height: 90px;
+	float: end;
+}
+.jquery-script-clear {
+	clear: both;
+	height: 0;
+}

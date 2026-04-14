@@ -1,0 +1,31 @@
+[data-header-style="color"] {
+    .app-header {
+        --header-bg: #{$primary};
+        --border: rgba(255, 255, 255, 0.1);
+    }
+    .nav-link.icon {
+        color: rgba(255, 255, 255, 0.7);
+        svg {
+            fill: rgba(255, 255, 255, 0.7);
+        }
+        &.active, &:focus, &:hover {
+            color: $custom-white;
+            svg {
+                fill: $custom-white;
+            }
+        }
+    }
+    .responsive-logo .main-logo .desktop-logo {
+        display: block;
+
+        &.desktop-logo-dark {
+            display: none;
+        }
+    }
+
+    @media (max-width: 991px) {
+        .responsive-navbar .navbar-collapse {
+            background-color: #{$primary};
+        }
+    }
+}

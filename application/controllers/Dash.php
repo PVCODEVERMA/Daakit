@@ -10,7 +10,7 @@ class Dash extends User_controller {
 
     public function index()
 	{
-		$this->layout('dash/index');
+		redirect('analytics');
     }
     
     public function channels() {

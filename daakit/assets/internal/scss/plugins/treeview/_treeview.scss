@@ -1,0 +1,101 @@
+.tree {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+
+    ul {
+        margin: 0;
+        padding: 0;
+        list-style: none;
+        margin-inline-start: 1em;
+        position: relative;
+
+        ul {
+            margin-inline-start: 0.5em;
+        }
+
+        &:before {
+            content: "";
+            display: block;
+            width: 0;
+            position: absolute;
+            inset-block: 0;
+            inset-inline-start: 0;
+            border-inline-start: 1px solid $border;
+        }
+    }
+
+    li {
+        margin: 0;
+        line-height: 2em;
+        color: $default-color;
+        position: relative;
+    }
+
+    ul li {
+        padding: 0 1em;
+    }
+
+    li i {
+        float: $float-start;
+        line-height: 2;
+        margin-inline-end: 5px;
+        font-weight: bold;
+        color: $primary;
+        cursor: pointer;
+    }
+
+    ul li {
+        &:before {
+            content: "";
+            display: block;
+            width: 10px;
+            height: 0;
+            border-block-start: 1px solid $border;
+            margin-block-start: -1px;
+            position: absolute;
+            inset-block-start: 1em;
+            inset-inline-start: 0;
+        }
+
+        &:last-child:before {
+            background: $white;
+            height: auto;
+            inset-block-start: 1em;
+            inset-block-end: 0;
+        }
+    }
+}
+
+.indicator {
+    margin-inline-end: 5px;
+    color: #4b10a4;
+}
+
+.tree li {
+    a {
+        text-decoration: none;
+        color: $default-color;
+    }
+
+    button {
+        text-decoration: none;
+        color: #29273c;
+        border: none;
+        background: transparent;
+        margin: 0;
+        padding: 0;
+        outline: 0;
+
+        &:active,
+        &:focus {
+            text-decoration: none;
+            color: #29273c;
+            border: none;
+            background: transparent;
+            margin: 0;
+            padding: 0;
+            outline: 0;
+        }
+    }
+}

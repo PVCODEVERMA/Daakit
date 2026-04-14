@@ -59,6 +59,7 @@ $host_type = '';
 $domain = '';
 if ($host == 'localhost') {
   $route['dash'] = 'analytics';
+  $route['kyc'] = 'analytics/kyc';
   $route['admin'] = 'admin/analytics';
   $route['admin/dash'] = 'admin/analytics';
   $route['n/(:num)/(:num)'] = 'forms/ndr/$1/$2';
@@ -75,30 +76,7 @@ if ($host == 'localhost') {
   $route['default_controller'] = 'users';
   $route['translate_uri_dashes'] = FALSE;
 
-} //else {
+} 
 
-//   if ($host == 'ordr.live') {
-//     $route['n/(:num)/(:num)'] = 'forms/ndr/$1/$2';
-//     $route['forms/success'] = 'forms/success';
-//   }
-//   if (preg_match("/.ordr\.live$/", $host)) {
-//     $host_type = 'subdomain';
-//     $domain = explode('.', $host)[0];
-//   }
-//   // else {
-//   //   $host_type = 'domain';
-//   //   $domain = $host;
-//   // }
-//   $route['shipping/tracking_order/(:any)'] = 'trk/tracking_ordernumber/$1';
-//   $route['track'] = 'trk/track_order';
-//   $route['trk/(:any)'] = 'trk/tracking/$1';;
-//   $route['default_controller'] = 'trk/track_order';
-//   if (!is_cli()) {
-//     $route['(:any)'] = 'xyz';
-//     $route['(:any)/(:any)'] = 'xyz';
-//     $route['(:any)/(:any)/(:any)'] = 'xyz';
-//   }
-//   $route['translate_uri_dashes'] = FALSE;
-// }
 define('HOST_TYPE', $host_type);
 define('DOMAIN', $domain);

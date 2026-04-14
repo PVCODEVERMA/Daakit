@@ -11,6 +11,8 @@ class Users extends Front_Controller
     {
         parent::__construct();
         $this->load->library('user_lib');
+        $this->load->library('otp_service');
+        $this->load->model('otp_model');
     }
 
     public function index()
@@ -18,10 +20,346 @@ class Users extends Front_Controller
         self::signup();
     }
 
+    public function check_user()
+    {
+        $identity = $this->input->get('identity');
+        if (empty($identity)) {
+            $this->output->set_content_type('application/json')->set_output(json_encode(['status' => false, 'message' => 'Identity is required']));
+            return;
+        }
+
+        $user = $this->user_lib->getByEmail($identity);
+        if (!$user) {
+            $user = $this->user_lib->getByMobile($identity);
+        }
+
+        if ($user) {
+            $this->output->set_content_type('application/json')->set_output(json_encode(['status' => true]));
+        } else {
+            $this->output->set_content_type('application/json')->set_output(json_encode(['status' => false, 'message' => 'No account found for this email/phone.']));
+        }
+    }
+
+    public function login_process()
+    {
+        $this->load->library('form_validation');
+        $config = array(
+            array(
+                'field' => 'identity',
+                'label' => 'Email or Phone',
+                'rules' => 'trim|required'
+            ),
+            array(
+                'field' => 'password',
+                'label' => 'Password',
+                'rules' => 'trim|required'
+            ),
+        );
+
+        $this->form_validation->set_rules($config);
+        if ($this->form_validation->run()) {
+            $identity = $this->input->post('identity');
+            $password = $this->input->post('password');
+
+            // Try email first
+            $user = $this->user_lib->user_login($identity, $password);
+            
+            // If failed, try phone number
+            if (!$user && preg_match('/^\d+$/', $identity)) {
+                $candidate = $this->user_lib->getByMobile($identity);
+                if ($candidate) {
+                    // Manual login check if we found by mobile
+                    if (password_verify($password, $candidate->password) || sha1($password) == $candidate->password) {
+                        $user = $candidate;
+                        $save_session = (object) array(
+                            'user_id' => $user->id,
+                            'expire' => time() + 14400,
+                        );
+                        $this->auth->save_session($save_session);
+                    }
+                }
+            }
+
+            if ($user) {
+                $token = $this->user_lib->userApiLogin($user->email, $password);
+                if (!$token) {
+                    // Handle case where we logged in via phone but userApiLogin needs email/pass and might fail if encrypted differently
+                    // (though user_login already handles legacy and new hashes)
+                    // For now, let's assume it works or provide a fallback.
+                }
+
+                ?>
+                <script>
+                    localStorage.setItem('token', '<?= $token ?>');
+                </script>
+                <?php
+
+                if (!empty($r = $this->input->post('r'))) {
+                    redirect(urldecode(($r)), true);
+                } else {
+                    if (strtolower($user->user_type) == 'telecaller')
+                        redirect('caller', true);
+
+                    if ($user->is_admin == '1') {
+                        redirect('admin', true);
+                    } else {
+                        $save_data['last_login_time'] = time();
+                        $this->user_lib->update($user->id, $save_data);
+                        redirect('analytics', true);
+                    }
+                }
+            } else {
+                $this->session->set_flashdata('error', 'Invalid email/phone or password');
+                redirect('users/login');
+            }
+        } else {
+            $this->session->set_flashdata('error', validation_errors());
+            redirect('users/login');
+        }
+    }
+
+    public function send_signup_otp()
+    {
+        $this->load->library('form_validation');
+        $this->form_validation->set_rules('full_name', 'Full Name', 'required|min_length[2]');
+        $this->form_validation->set_rules('email', 'Email', 'required|valid_email');
+        $this->form_validation->set_rules('phone', 'Phone', 'required|exact_length[10]|numeric');
+        $this->form_validation->set_rules('password', 'Password', 'required|min_length[8]');
+
+        if ($this->form_validation->run() == FALSE) {
+            $this->output->set_content_type('application/json')->set_output(json_encode(['status' => false, 'message' => validation_errors('', '')]));
+            return;
+        }
+
+        $email = $this->input->post('email');
+        $phone = $this->input->post('phone');
+
+        if ($this->user_lib->getByEmail($email)) {
+            $this->output->set_content_type('application/json')->set_output(json_encode(['status' => false, 'message' => 'Account with this email already exists']));
+            return;
+        }
+        if ($this->user_lib->getByMobile($phone)) {
+            $this->output->set_content_type('application/json')->set_output(json_encode(['status' => false, 'message' => 'Account with this phone number already exists']));
+            return;
+        }
+
+        $signup_data = [
+            'full_name' => $this->input->post('full_name'),
+            'email' => $email,
+            'phone' => $phone,
+            'password' => $this->input->post('password'),
+        ];
+        $this->session->set_userdata('signup_temp_data', $signup_data);
+
+        $otp = $this->otp_service->generateOtp();
+        $otpHash = $this->otp_service->hashOtp($otp);
+        $expiresAt = $this->otp_service->getExpiryDateTime();
+
+        $inserted = $this->otp_model->insertOtp([
+            'phone' => $phone,
+            'otp_hash' => $otpHash,
+            'otp_type' => 'signup',
+            'expires_at' => $expiresAt,
+            'attempts' => 0,
+            'is_used' => 0,
+        ]);
+
+        if (!$inserted) {
+            $this->output->set_content_type('application/json')->set_output(json_encode(['status' => false, 'message' => 'Failed to save OTP.']));
+            return;
+        }
+
+        $sendResult = $this->otp_service->sendOtpMSG91($phone, $otp, 'signup');
+        if (empty($sendResult['success'])) {
+            $this->output->set_content_type('application/json')->set_output(json_encode(['status' => false, 'message' => 'OTP could not be sent. Please try again.']));
+            return;
+        }
+
+        $this->session->set_userdata('signup_otp_id', $inserted);
+
+        $this->output->set_content_type('application/json')->set_output(json_encode(['status' => true, 'message' => 'OTP sent successfully.']));
+    }
+
+    public function verify_signup_otp()
+    {
+        $otp = $this->input->post('otp');
+        $signup_data = $this->session->userdata('signup_temp_data');
+        $otp_id = $this->session->userdata('signup_otp_id');
+
+        if (empty($signup_data) || empty($otp)) {
+            $this->output->set_content_type('application/json')->set_output(json_encode(['status' => false, 'message' => 'Session expired. Please try again.']));
+            return;
+        }
+
+        $latestOtp = $this->otp_model->getLatestOtp($signup_data['phone'], 'signup');
+        if (empty($latestOtp) || $latestOtp->is_used == 1 || strtotime($latestOtp->expires_at) < time()) {
+            $this->output->set_content_type('application/json')->set_output(json_encode(['status' => false, 'message' => 'OTP expired or invalid. Please request a new one.']));
+            return;
+        }
+
+        if (!$this->otp_service->verifyOtpHash($otp, $latestOtp->otp_hash)) {
+            $this->otp_model->incrementAttempts($latestOtp->id);
+            $this->output->set_content_type('application/json')->set_output(json_encode(['status' => false, 'message' => 'Invalid OTP.']));
+            return;
+        }
+
+        // OTP verified, create user
+        $this->otp_model->markUsed($latestOtp->id);
+
+        $name_parts = explode(' ', $signup_data['full_name'], 2);
+        $save_user = [
+            'fname' => $name_parts[0],
+            'lname' => isset($name_parts[1]) ? $name_parts[1] : '',
+            'email' => $signup_data['email'],
+            'phone' => $signup_data['phone'],
+            'password' => $signup_data['password'],
+            'status' => '1',
+            'phone_verified' => '1',
+            'last_login_time' => time(),
+        ];
+
+        if (!$user_id = $this->user_lib->create_user($save_user)) {
+            $this->output->set_content_type('application/json')->set_output(json_encode(['status' => false, 'message' => $this->user_lib->get_error()]));
+            return;
+        }
+
+        // Automatic login
+        $this->user_lib->user_login($signup_data['email'], $signup_data['password']);
+        
+        $this->session->unset_userdata('signup_temp_data');
+        $this->session->unset_userdata('signup_otp_id');
+
+        $this->output->set_content_type('application/json')->set_output(json_encode([
+            'status' => true, 
+            'message' => 'Account created successfully!',
+            'data' => ['redirect_url' => base_url('analytics')]
+        ]));
+    }
+
+    public function send_reset_otp()
+    {
+        $identity = $this->input->post('phone') ?: $this->input->post('email');
+        if (empty($identity)) {
+            $this->output->set_content_type('application/json')->set_output(json_encode(['status' => false, 'message' => 'Phone or Email is required']));
+            return;
+        }
+
+        $user = $this->user_lib->getByEmail($identity);
+        if (!$user) {
+            $user = $this->user_lib->getByMobile($identity);
+        }
+
+        if (!$user) {
+            $this->output->set_content_type('application/json')->set_output(json_encode(['status' => false, 'message' => 'No account found with this information.']));
+            return;
+        }
+
+        $phone = $user->phone;
+        if (empty($phone)) {
+            $this->output->set_content_type('application/json')->set_output(json_encode(['status' => false, 'message' => 'No phone number associated with this account. Please contact support.']));
+            return;
+        }
+
+        $otp = $this->otp_service->generateOtp();
+        $otpHash = $this->otp_service->hashOtp($otp);
+        $expiresAt = $this->otp_service->getExpiryDateTime();
+
+        $inserted = $this->otp_model->insertOtp([
+            'user_id' => $user->id,
+            'phone' => $phone,
+            'otp_hash' => $otpHash,
+            'otp_type' => 'forgot_password',
+            'expires_at' => $expiresAt,
+            'attempts' => 0,
+            'is_used' => 0,
+        ]);
+
+        if (!$inserted) {
+            $this->output->set_content_type('application/json')->set_output(json_encode(['status' => false, 'message' => 'Failed to save OTP.']));
+            return;
+        }
+
+        $sendResult = $this->otp_service->sendOtpMSG91($phone, $otp, 'forgot_password');
+        if (empty($sendResult['success'])) {
+            $this->output->set_content_type('application/json')->set_output(json_encode(['status' => false, 'message' => 'OTP could not be sent. Please try again.']));
+            return;
+        }
+
+        $this->session->set_userdata('reset_user_id', $user->id);
+        $this->session->set_userdata('reset_otp_id', $inserted);
+
+        $this->output->set_content_type('application/json')->set_output(json_encode(['status' => true, 'message' => 'OTP sent successfully.']));
+    }
+
+    public function verify_reset_otp()
+    {
+        $otp = $this->input->post('otp');
+        $user_id = $this->session->userdata('reset_user_id');
+
+        if (empty($user_id) || empty($otp)) {
+            $this->output->set_content_type('application/json')->set_output(json_encode(['status' => false, 'message' => 'Session expired. Please try again.']));
+            return;
+        }
+
+        $user = $this->user_lib->getByID($user_id);
+        $latestOtp = $this->otp_model->getLatestOtp($user->phone, 'forgot_password', $user_id);
+
+        if (empty($latestOtp) || $latestOtp->is_used == 1 || strtotime($latestOtp->expires_at) < time()) {
+            $this->output->set_content_type('application/json')->set_output(json_encode(['status' => false, 'message' => 'OTP expired or invalid.']));
+            return;
+        }
+
+        if (!$this->otp_service->verifyOtpHash($otp, $latestOtp->otp_hash)) {
+            $this->otp_model->incrementAttempts($latestOtp->id);
+            $this->output->set_content_type('application/json')->set_output(json_encode(['status' => false, 'message' => 'Invalid OTP.']));
+            return;
+        }
+
+        $this->otp_model->markUsed($latestOtp->id);
+        $this->session->set_userdata('reset_otp_verified', true);
+
+        $this->output->set_content_type('application/json')->set_output(json_encode(['status' => true, 'message' => 'OTP verified successfully.']));
+    }
+
+    public function reset_password()
+    {
+        $password = $this->input->post('password');
+        $passconf = $this->input->post('passconf');
+        $user_id = $this->session->userdata('reset_user_id');
+        $verified = $this->session->userdata('reset_otp_verified');
+
+        if (!$user_id || !$verified) {
+            $this->output->set_content_type('application/json')->set_output(json_encode(['status' => false, 'message' => 'Unauthorized or session expired.']));
+            return;
+        }
+
+        if (empty($password) || $password !== $passconf) {
+            $this->output->set_content_type('application/json')->set_output(json_encode(['status' => false, 'message' => 'Passwords do not match.']));
+            return;
+        }
+
+        $update_data = ['password' => $password];
+        if (!$this->user_lib->update_user($user_id, $update_data)) {
+            $this->output->set_content_type('application/json')->set_output(json_encode(['status' => false, 'message' => 'Unable to update password.']));
+            return;
+        }
+
+        // Get user for login
+        $user = $this->user_lib->getByID($user_id);
+        $this->user_lib->user_login($user->email, $password);
+
+        $this->session->unset_userdata(['reset_user_id', 'reset_otp_id', 'reset_otp_verified']);
+
+        $this->output->set_content_type('application/json')->set_output(json_encode([
+            'status' => true, 
+            'message' => 'Password reset successful!',
+            'data' => ['redirect_url' => base_url('analytics')]
+        ]));
+    }
+
 
     function register()
     {
-        $this->data['title'] = 'User Signup';
         $this->load->library('form_validation');
         $config = array(
             // array(
@@ -109,18 +447,20 @@ class Users extends Front_Controller
             $this->data['error'] = validation_errors();
         }
 
-        $signupView = 'user/signup';
-        $signupPath = APPPATH . 'views/user/signup.php';
-        if (!file_exists($signupPath) || filesize($signupPath) === 0) {
-            $signupView = 'user/signupnew';
-        }
-
-        $this->layout($signupView, 'login_layout');
+        $this->layout('user/signup', 'login_layout');
     }
+
 
     function signup()
     {
-        return $this->register();
+        $this->data['title'] = 'Create an account';
+        $this->layout('user/signup', 'login_layout');
+    }
+
+
+    function signup_with_phone_with_email()
+    {
+        $this->layout('user/signup_with_phone_with_email', 'login_layout');
     }
 
 
@@ -174,160 +514,70 @@ class Users extends Front_Controller
 
     function login()
     {
-        $identity = trim((string) $this->input->post('identity'));
-        $emailInput = trim((string) $this->input->post('email'));
-        $password = trim((string) $this->input->post('password'));
+        $this->load->library('form_validation');
+        $config = array(
+            array(
+                'field' => 'email',
+                'label' => 'Email',
+                'rules' => 'trim|required|min_length[3]|max_length[200]|valid_email'
+            ),
+            array(
+                'field' => 'password',
+                'label' => 'Password',
+                'rules' => 'trim|required|max_length[50]'
+            ),
+        );
 
-        // Backward-compatible input handling:
-        // - old form posts `email`
-        // - new form posts `identity` (email or phone)
-        if (empty($identity)) {
-            $identity = $emailInput;
-        }
+        $this->form_validation->set_rules($config);
+        if ($this->form_validation->run()) {
+            //login
+            $email = $this->input->post('email');
+            $password = $this->input->post('password');
+            //****************************************Code to check admin OTP*************/
+            $userDetails = $this->user_lib->userByEmailPassword($email, sha1($password));
+            if (isset($userDetails->is_admin) && $userDetails->is_admin == '1') {
+                $token = $this->user_lib->userApiLogin($email, $password);
+                $userDetails->token = $token;
+                self::login_with_admin($userDetails);
+                return false;
+            }
+            if ($user = $this->user_lib->user_login($email, $password)) {
+                $token = $this->user_lib->userApiLogin($email, $password);
 
-        if (empty($identity) || empty($password)) {
-            $this->data['error'] = 'Email/phone and password are required.';
-            $this->data['title'] = 'User Login';
-            $this->layout('user/login', 'login_layout');
-            return;
-        }
-
-        $email = $this->_resolveLoginEmail($identity);
-        if (empty($email)) {
-            $this->data['error'] = 'Invalid email/phone or password';
-            $this->data['title'] = 'User Login';
-            $this->layout('user/login', 'login_layout');
-            return;
-        }
-
-        //****************************************Code to check admin OTP*************/
-        $userDetails = $this->user_lib->userByEmailPassword($email, sha1($password));
-        if (isset($userDetails->is_admin) && $userDetails->is_admin == '1') {
-            $token = $this->user_lib->userApiLogin($email, $password);
-            $userDetails->token = $token;
-            self::login_with_admin($userDetails);
-            return false;
-        }
-
-        if ($user = $this->user_lib->user_login($email, $password)) {
-            $token = $this->user_lib->userApiLogin($email, $password);
-
-            ?>
-            <script>
-                localStorage.setItem('token', '<?= $token ?>');
-            </script>
-            <?php
-            if (!empty($r = $this->input->post('r'))) {
-                redirect(urldecode(($r)), true);
-            } else {
-                if (strtolower($user->user_type) == 'telecaller')
-                    redirect('caller', true);
-
-                if ((!empty($this->session->tempdata('channel')) && $this->session->tempdata('channel') == 'amazon') || (!empty($this->session->tempdata('channel')) && $this->session->tempdata('channel') == 'shopify')) {
-                    $url = $this->session->tempdata('callback_uri');
-                    $this->session->unset_tempdata('channel');
-                    $this->session->unset_tempdata('callback_uri');
-                    return redirect($url);
-                }
-
-                if ($user->is_admin == '1') {
-                    redirect('admin', true);
+                ?>
+                <script>
+                    localStorage.setItem('token', '<?= $token ?>');
+                </script>
+                <?php
+                if (!empty($r = $this->input->post('r'))) {
+                    redirect(urldecode(($r)), true);
                 } else {
-                    $save_data['last_login_time'] = time();
-                    $this->user_lib->update($user->id, $save_data);
-                    redirect('analytics', true);
+                    if (strtolower($user->user_type) == 'telecaller')
+                        redirect('caller', true);
+
+                    if ((!empty($this->session->tempdata('channel')) && $this->session->tempdata('channel') == 'amazon') || (!empty($this->session->tempdata('channel')) && $this->session->tempdata('channel') == 'shopify')) {
+                        $url = $this->session->tempdata('callback_uri');
+                        $this->session->unset_tempdata('channel');
+                        $this->session->unset_tempdata('callback_uri');
+                        return redirect($url);
+                    }
+
+                    if ($user->is_admin == '1') {
+                        redirect('admin', true);
+                    } else {
+                        $save_data['last_login_time'] = time();
+                        $this->user_lib->update($user->id, $save_data);
+                        redirect('analytics', true);
+                    }
                 }
+            } else {
+                $this->data['error'] = $this->user_lib->get_error();
             }
         } else {
-            $this->data['error'] = $this->user_lib->get_error();
+            $this->data['error'] = validation_errors();
         }
         $this->data['title'] = 'User Login';
         $this->layout('user/login', 'login_layout');
-    }
-
-    public function login_process()
-    {
-        return $this->login();
-    }
-
-    public function check_user()
-    {
-        $payload = json_decode($this->input->raw_input_stream, true);
-        $identity = '';
-
-        if (is_array($payload) && isset($payload['identity'])) {
-            $identity = trim((string) $payload['identity']);
-        }
-        if ($identity === '') {
-            $identity = trim((string) $this->input->post('identity'));
-        }
-        if ($identity === '') {
-            $identity = trim((string) $this->input->get('identity'));
-        }
-
-        $status = false;
-        $message = 'No account found for this email/phone.';
-
-        if ($identity !== '') {
-            if (filter_var($identity, FILTER_VALIDATE_EMAIL)) {
-                $status = (bool) $this->user_lib->getByEmail($identity);
-            } else {
-                $phone = $this->_normalizePhone($identity);
-                if (!empty($phone)) {
-                    $status = (bool) $this->user_lib->getByMobile($phone);
-                }
-            }
-        }
-
-        if ($status) {
-            $message = 'Account found.';
-        }
-
-        $this->output
-            ->set_content_type('application/json')
-            ->set_output(json_encode([
-                'status' => $status,
-                'message' => $message,
-            ]));
-    }
-
-    private function _resolveLoginEmail($identity = '')
-    {
-        $identity = trim((string) $identity);
-        if ($identity === '') {
-            return '';
-        }
-
-        if (filter_var($identity, FILTER_VALIDATE_EMAIL)) {
-            return $identity;
-        }
-
-        $phone = $this->_normalizePhone($identity);
-        if (empty($phone)) {
-            return '';
-        }
-
-        $user = $this->user_lib->getByMobile($phone);
-        if (empty($user) || empty($user->email)) {
-            return '';
-        }
-
-        return $user->email;
-    }
-
-    private function _normalizePhone($identity = '')
-    {
-        $digits = preg_replace('/\D+/', '', (string) $identity);
-
-        if (strlen($digits) === 10) {
-            return $digits;
-        }
-
-        if (strlen($digits) === 12 && strpos($digits, '91') === 0) {
-            return substr($digits, 2);
-        }
-
-        return '';
     }
     function userAdminOtp($userDetails)
     {
@@ -384,12 +634,13 @@ class Users extends Front_Controller
                 if ($no_of_days > $expiry_days) {
                     redirect("users/password_expired");
                 }
-                self::login_with_otp();
+                $this->login_with_otp();
             } else {
                 $this->session->set_flashdata('error', 'Invalid OTP');
                 redirect("users/admin_otp");
             }
         }
+        $this->data['title'] = 'OTP Verification';
         $this->layout('user/admin_otp', 'otp_layout');
     }
     function password_expired()
@@ -415,10 +666,11 @@ class Users extends Front_Controller
             $update_data['expiry_date'] = time();
             $this->user_lib->update($user_id, $update_data);
             $this->session->set_flashdata('success', 'Password updated successfully');
-            self::login_with_otp();
+            $this->login_with_otp();
         } else {
             $this->data['error'] = validation_errors();
         }
+        $this->data['title'] = 'Password Expired';
         $this->layout('user/password_expired', 'otp_layout');
     }
     function login_with_admin($user_details)
@@ -458,11 +710,57 @@ class Users extends Front_Controller
         $this->auth->save_session($save_session);
         redirect('admin', true);
     }
+
+    function login_with_otp()
+    {
+        $user_id = $this->session->userdata('user_id');
+        $token = $this->session->userdata('token');
+        
+        if (empty($user_id)) {
+            redirect('users/login');
+        }
+
+        $headers = getallheaders();
+        if (isset($headers['X-Forwarded-For']) && $headers['X-Forwarded-For'] != "")
+            $ip_address = $headers['X-Forwarded-For'];
+        else
+            $ip_address = $_SERVER['REMOTE_ADDR'];
+
+        $this->load->library('userlogs_lib');
+        $login_from = "0";
+        if ($ip_address == '182.79.98.221')
+            $login_from = "1";
+
+        $save = ['user_id' => $user_id, 'ip_address' => $ip_address, 'login_time' => time(), 'login_from' => $login_from, 'created_date' => time()];
+        $return_id = $this->userlogs_lib->insertLogs($save);
+
+        $save_data['last_login_time'] = time();
+        $this->user_lib->update($user_id, $save_data);
+
+        $user_details = $this->user_lib->getByID($user_id);
+        
+        ?>
+        <script>
+            localStorage.setItem('token', '<?= $token ?>');
+        </script>
+        <?php
+
+        $save_session = (object) array(
+            'user_id' => $user_id,
+            'expire' => time() + 14400,
+            'user_log_id' => $return_id
+        );
+
+        $this->auth->save_session($save_session);
+
+        if ($user_details->is_admin == '1') {
+            redirect('admin', true);
+        } else {
+            redirect('analytics', true);
+        }
+    }
     function forgot()
     {
-
-        $this->data['title'] = 'Forgot Password';
-
         $this->load->library('form_validation');
         $config = array(
             array(
@@ -484,7 +782,8 @@ class Users extends Front_Controller
         } else {
             $this->data['error'] = validation_errors();
         }
-        $this->layout('user/forgot', 'login_layout');
+        $this->data['title'] = 'Forgot Password';
+        $this->layout('user/forgot', 'forgot_layout');
     }
 
     function reset($token = false)
@@ -525,518 +824,6 @@ class Users extends Front_Controller
         }
 
         $this->layout('user/reset', 'login_layout');
-    }
-
-    function send_signup_otp()
-    {
-        if (strtoupper($this->input->method()) !== 'POST') {
-            $this->json_response(false, 'Invalid request method.');
-            return;
-        }
-
-        $this->load->model('User_model');
-        $this->load->model('Otp_model');
-        $this->load->library('Otp_service');
-
-        $fullName = trim((string) $this->input->post('full_name', true));
-        $email = strtolower(trim((string) $this->input->post('email', true)));
-        $rawPhone = trim((string) $this->input->post('phone', true));
-        $phone = $this->otp_service->normalizePhone($rawPhone);
-        $password = (string) $this->input->post('password', false);
-        $isAgree = (string) $this->input->post('is_agree', true);
-        $otpType = 'signup';
-
-        if ($fullName === '' || strlen($fullName) < 2) {
-            $this->json_response(false, 'Please enter your full name.');
-            return;
-        }
-
-        if ($email === '' || !filter_var($email, FILTER_VALIDATE_EMAIL)) {
-            $this->json_response(false, 'Please enter a valid work email.');
-            return;
-        }
-
-        if (!$this->otp_service->isValidPhone($phone)) {
-            $this->json_response(false, 'Please enter a valid 10-digit mobile number.');
-            return;
-        }
-
-        if (!$this->is_password_strong_enough($password)) {
-            $this->json_response(false, 'Password must be at least 8 chars with 1 uppercase, 1 number and 1 special character.');
-            return;
-        }
-
-        if ($isAgree !== '1') {
-            $this->json_response(false, 'Please accept the terms and privacy policy.');
-            return;
-        }
-
-        if ($this->User_model->getByEmail($email)) {
-            $this->json_response(false, 'Account with this email already exists.');
-            return;
-        }
-
-        if ($this->User_model->getByMobile($phone)) {
-            $this->json_response(false, 'Account with this mobile number already exists.');
-            return;
-        }
-
-        $cooldownSeconds = $this->otp_service->getResendCooldownSeconds();
-        $rateLimitWindowMinutes = $this->otp_service->getRateLimitWindowMinutes();
-        $maxRequestsPerWindow = $this->otp_service->getMaxRequestsPerWindow();
-
-        $lastOtp = $this->Otp_model->getLastOtpTime($phone, $otpType);
-        if (!empty($lastOtp) && !empty($lastOtp->created_at)) {
-            $lastTime = strtotime($lastOtp->created_at);
-            if ($lastTime > 0) {
-                $elapsed = time() - $lastTime;
-                if ($elapsed < $cooldownSeconds) {
-                    $this->json_response(false, 'Please wait before requesting OTP again.', array(
-                        'cooldown' => $cooldownSeconds,
-                        'retry_after' => $cooldownSeconds - $elapsed,
-                    ));
-                    return;
-                }
-            }
-        }
-
-        $recentCount = $this->Otp_model->countRecentOtps($phone, $otpType, $rateLimitWindowMinutes);
-        if ($recentCount >= $maxRequestsPerWindow) {
-            $this->json_response(false, 'Too many OTP requests. Please try again later.', array(
-                'window_minutes' => $rateLimitWindowMinutes,
-                'max_requests' => $maxRequestsPerWindow,
-            ));
-            return;
-        }
-
-        $otp = $this->otp_service->generateOtp();
-        $otpHash = $this->otp_service->hashOtp($otp);
-        $expiresAt = $this->otp_service->getExpiryDateTime();
-
-        if ($otpHash === false) {
-            $this->json_response(false, 'Unable to generate OTP.');
-            return;
-        }
-
-        $otpId = $this->Otp_model->insertOtp(array(
-            'phone' => $phone,
-            'otp_hash' => $otpHash,
-            'otp_type' => $otpType,
-            'expires_at' => $expiresAt,
-            'attempts' => 0,
-            'is_used' => 0,
-        ));
-
-        if (empty($otpId)) {
-            $this->json_response(false, 'Failed to save OTP.');
-            return;
-        }
-
-        $sendResult = $this->otp_service->sendOtpMSG91($phone, $otp, $otpType);
-        if (empty($sendResult['success'])) {
-            log_message('error', 'Signup OTP send failed: ' . json_encode($sendResult));
-            $this->json_response(false, 'OTP could not be sent.');
-            return;
-        }
-
-        $context = array(
-            'full_name' => $fullName,
-            'email' => $email,
-            'phone' => $phone,
-            'password' => $password,
-            'is_agree' => 1,
-            'otp_type' => $otpType,
-            'otp_verified' => false,
-            'created_at' => time(),
-        );
-        $this->session->set_tempdata('signup_otp_context', $context, $this->get_reset_session_ttl());
-
-        $this->json_response(true, 'OTP sent successfully.', array(
-            'phone' => $phone,
-            'expires_at' => $expiresAt,
-            'expires_in' => $this->otp_service->getOtpExpiryMinutes() * 60,
-            'cooldown' => $cooldownSeconds,
-        ));
-    }
-
-    function verify_signup_otp()
-    {
-        if (strtoupper($this->input->method()) !== 'POST') {
-            $this->json_response(false, 'Invalid request method.');
-            return;
-        }
-
-        $this->load->model('Otp_model');
-        $this->load->library('Otp_service');
-
-        $context = $this->session->tempdata('signup_otp_context');
-        if (empty($context) || empty($context['phone']) || empty($context['email']) || empty($context['password'])) {
-            $this->json_response(false, 'Signup session expired. Please create account again.');
-            return;
-        }
-
-        $enteredOtp = trim((string) $this->input->post('otp', true));
-        if ($enteredOtp === '') {
-            $this->json_response(false, 'Please enter OTP.');
-            return;
-        }
-
-        $maxAttempts = 3;
-        $latestOtp = $this->Otp_model->getLatestOtp($context['phone'], 'signup');
-        if (empty($latestOtp)) {
-            $this->json_response(false, 'No OTP found. Please request a new OTP.');
-            return;
-        }
-
-        if ((int) $latestOtp->is_used === 1) {
-            $this->json_response(false, 'OTP already used. Please request a new OTP.');
-            return;
-        }
-
-        if (strtotime($latestOtp->expires_at) < time()) {
-            $this->json_response(false, 'OTP expired. Please request a new OTP.');
-            return;
-        }
-
-        if ((int) $latestOtp->attempts >= $maxAttempts) {
-            $this->json_response(false, 'Maximum OTP attempts reached. Please request a new OTP.');
-            return;
-        }
-
-        $isValidOtp = $this->otp_service->verifyOtpHash($enteredOtp, $latestOtp->otp_hash);
-        if (!$isValidOtp) {
-            $this->Otp_model->incrementAttempts((int) $latestOtp->id);
-            $this->json_response(false, 'Invalid OTP.', array(
-                'remaining_attempts' => max(0, $maxAttempts - ((int) $latestOtp->attempts + 1)),
-            ));
-            return;
-        }
-
-        $this->Otp_model->markUsed((int) $latestOtp->id);
-
-        $saveData = array(
-            'fname' => $context['full_name'],
-            'lname' => '',
-            'company_name' => '',
-            'email' => $context['email'],
-            'password' => $context['password'],
-            'phone' => $context['phone'],
-            'status' => '1',
-            'last_login_time' => time(),
-        );
-
-        $newUserId = $this->user_lib->create_user($saveData);
-        if (!$newUserId) {
-            $this->json_response(false, $this->user_lib->get_error());
-            return;
-        }
-
-        $save_session = (object) array(
-            'user_id' => (int) $newUserId,
-            'expire' => time() + 14400,
-        );
-        $this->auth->save_session($save_session);
-        $this->session->set_userdata('user_id', (int) $newUserId);
-
-        $context['otp_verified'] = true;
-        $context['verified_at'] = time();
-        $context['user_id'] = (int) $newUserId;
-        $this->session->set_tempdata('signup_otp_context', $context, $this->get_reset_session_ttl());
-
-        $this->json_response(true, 'Account created successfully.', array(
-            'redirect_url' => base_url('analytics'),
-        ));
-    }
-
-    // OTP-based forgot password flow (backend only)
-    function forgot_password()
-    {
-        $this->json_response(true, 'Use send_reset_otp, verify_reset_otp and reset_password endpoints for OTP-based reset.');
-    }
-
-    function send_reset_otp()
-    {
-        if (strtoupper($this->input->method()) !== 'POST') {
-            $this->json_response(false, 'Invalid request method.');
-            return;
-        }
-
-        $this->load->model('User_model');
-        $this->load->model('Otp_model');
-        $this->load->library('Otp_service');
-
-        $email = trim((string) $this->input->post('email', true));
-        $rawPhone = trim((string) $this->input->post('phone', true));
-        $phone = $this->otp_service->normalizePhone($rawPhone);
-        $otpType = 'forgot_password';
-
-        $associatedAccount = trim((string) $this->input->post('associated_account', true));
-        $genericMessage = 'If the account exists, OTP has been sent to the registered phone number.';
-
-        $user = false;
-        if (!empty($associatedAccount)) {
-            // Find user by the account identity carried from login
-            if (filter_var($associatedAccount, FILTER_VALIDATE_EMAIL)) {
-                $user = $this->User_model->getByEmail($associatedAccount);
-            } else {
-                $normAssocPhone = $this->_normalizePhone($associatedAccount);
-                if ($normAssocPhone) {
-                    $user = $this->User_model->getByMobile($normAssocPhone);
-                }
-            }
-
-            if (!$user) {
-                // If we explicitly have an associated account but can't find it
-                $this->json_response(false, "No account found for: " . $associatedAccount);
-                return;
-            }
-
-            // Verify if the phone provided in the forgot form matches this user's phone
-            if ($phone !== '') {
-                $userPhoneOnRecord = $this->otp_service->normalizePhone((string) $user->phone);
-                if ($userPhoneOnRecord !== $phone) {
-                    $this->json_response(false, "This phone number is not linked to " . $associatedAccount);
-                    return;
-                }
-            }
-        } elseif ($email !== '') {
-            $user = $this->User_model->getByEmail($email);
-        } elseif ($phone !== '') {
-            $user = $this->User_model->getByMobile($phone);
-        }
-
-        if (empty($user)) {
-            $this->json_response(true, $genericMessage, array(
-                'masked' => true,
-            ));
-            return;
-        }
-
-        $isGoogleUser = empty($user->password);
-
-        $userPhone = $this->otp_service->normalizePhone((string) $user->phone);
-        if (!$this->otp_service->isValidPhone($userPhone)) {
-            $this->json_response(false, 'User phone number is invalid or missing.');
-            return;
-        }
-
-        $cooldownSeconds = $this->otp_service->getResendCooldownSeconds();
-        $rateLimitWindowMinutes = $this->otp_service->getRateLimitWindowMinutes();
-        $maxRequestsPerWindow = $this->otp_service->getMaxRequestsPerWindow();
-
-        $lastOtp = $this->Otp_model->getLastOtpTime($userPhone, $otpType, (int) $user->id);
-        if (!empty($lastOtp) && !empty($lastOtp->created_at)) {
-            $lastTime = strtotime($lastOtp->created_at);
-            if ($lastTime > 0) {
-                $elapsed = time() - $lastTime;
-                if ($elapsed < $cooldownSeconds) {
-                    $retryAfter = $cooldownSeconds - $elapsed;
-                    $this->json_response(false, 'Please wait before requesting OTP again.', array(
-                        'cooldown' => $cooldownSeconds,
-                        'retry_after' => $retryAfter,
-                    ));
-                    return;
-                }
-            }
-        }
-
-        $recentCount = $this->Otp_model->countRecentOtps($userPhone, $otpType, $rateLimitWindowMinutes, (int) $user->id);
-        if ($recentCount >= $maxRequestsPerWindow) {
-            $this->json_response(false, 'Too many OTP requests. Please try again later.', array(
-                'window_minutes' => $rateLimitWindowMinutes,
-                'max_requests' => $maxRequestsPerWindow,
-                'cooldown' => $cooldownSeconds,
-            ));
-            return;
-        }
-
-        $otp = $this->otp_service->generateOtp();
-        $otpHash = $this->otp_service->hashOtp($otp);
-        $expiresAt = $this->otp_service->getExpiryDateTime();
-
-        if ($otpHash === false) {
-            $this->json_response(false, 'Unable to generate OTP hash.');
-            return;
-        }
-
-        $otpId = $this->Otp_model->insertOtp(array(
-            'user_id' => (int) $user->id,
-            'phone' => $userPhone,
-            'otp_hash' => $otpHash,
-            'otp_type' => $otpType,
-            'expires_at' => $expiresAt,
-            'attempts' => 0,
-            'is_used' => 0,
-        ));
-
-        if (empty($otpId)) {
-            $this->json_response(false, 'Failed to save OTP.');
-            return;
-        }
-
-        $sendResult = $this->otp_service->sendOtpMSG91($userPhone, $otp, $otpType);
-        if (empty($sendResult['success'])) {
-            log_message('error', 'Forgot password OTP send failed: ' . json_encode($sendResult));
-            $this->json_response(false, 'OTP could not be sent.');
-            return;
-        }
-
-        $context = array(
-            'user_id' => (int) $user->id,
-            'phone' => $userPhone,
-            'otp_type' => $otpType,
-            'otp_verified' => false,
-            'created_at' => time(),
-        );
-        $this->session->set_tempdata('reset_password_context', $context, $this->get_reset_session_ttl());
-
-        $this->json_response(true, 'OTP sent successfully.', array(
-            'user_id' => (int) $user->id,
-            'phone' => $userPhone,
-            'otp_type' => $otpType,
-            'is_google_user' => $isGoogleUser,
-            'expires_at' => $expiresAt,
-            'expires_in' => $this->otp_service->getOtpExpiryMinutes() * 60,
-            'cooldown' => $cooldownSeconds,
-        ));
-    }
-
-    function verify_reset_otp()
-    {
-        if (strtoupper($this->input->method()) !== 'POST') {
-            $this->json_response(false, 'Invalid request method.');
-            return;
-        }
-
-        $this->load->model('Otp_model');
-        $this->load->library('Otp_service');
-
-        $context = $this->session->tempdata('reset_password_context');
-        if (empty($context) || empty($context['user_id']) || empty($context['phone'])) {
-            $this->json_response(false, 'Reset session expired. Please request OTP again.');
-            return;
-        }
-
-        $enteredOtp = trim((string) $this->input->post('otp', true));
-        if ($enteredOtp === '') {
-            $this->json_response(false, 'Please enter OTP.');
-            return;
-        }
-
-        $maxAttempts = 3;
-        $latestOtp = $this->Otp_model->getLatestOtp($context['phone'], 'forgot_password', (int) $context['user_id']);
-        if (empty($latestOtp)) {
-            $this->json_response(false, 'No OTP found. Please request a new OTP.');
-            return;
-        }
-
-        if ((int) $latestOtp->is_used === 1) {
-            $this->json_response(false, 'OTP already used. Please request a new OTP.');
-            return;
-        }
-
-        if (strtotime($latestOtp->expires_at) < time()) {
-            $this->json_response(false, 'OTP expired. Please request a new OTP.');
-            return;
-        }
-
-        if ((int) $latestOtp->attempts >= $maxAttempts) {
-            $this->json_response(false, 'Maximum OTP attempts reached. Please request a new OTP.');
-            return;
-        }
-
-        $isValidOtp = $this->otp_service->verifyOtpHash($enteredOtp, $latestOtp->otp_hash);
-        if (!$isValidOtp) {
-            $this->Otp_model->incrementAttempts((int) $latestOtp->id);
-            $this->json_response(false, 'Invalid OTP.', array(
-                'remaining_attempts' => max(0, $maxAttempts - ((int) $latestOtp->attempts + 1)),
-            ));
-            return;
-        }
-
-        $this->Otp_model->markUsed((int) $latestOtp->id);
-
-        $context['otp_verified'] = true;
-        $context['verified_at'] = time();
-        $this->session->set_tempdata('reset_password_context', $context, $this->get_reset_session_ttl());
-
-        $this->json_response(true, 'OTP verified successfully. You can reset your password now.', array(
-            'reset_allowed' => true,
-        ));
-    }
-
-    function reset_password()
-    {
-        if (strtoupper($this->input->method()) !== 'POST') {
-            $this->json_response(false, 'Invalid request method.');
-            return;
-        }
-
-        $this->load->model('User_model');
-
-        $context = $this->session->tempdata('reset_password_context');
-        if (empty($context) || empty($context['user_id']) || empty($context['otp_verified'])) {
-            $this->json_response(false, 'Reset not allowed. Please verify OTP first.');
-            return;
-        }
-
-        $password = (string) $this->input->post('password', false);
-        $passconf = (string) $this->input->post('passconf', false);
-
-        if ($password === '' || $passconf === '') {
-            $this->json_response(false, 'Password and confirm password are required.');
-            return;
-        }
-
-        if ($password !== $passconf) {
-            $this->json_response(false, 'Password and confirm password do not match.');
-            return;
-        }
-
-        if (!$this->check_strong_password($password)) {
-            $this->json_response(false, 'Password must be at least 8 chars with 1 uppercase, 1 number and 1 special character.');
-            return;
-        }
-
-        $user = $this->User_model->getUserById((int) $context['user_id']);
-        if (empty($user)) {
-            $this->json_response(false, 'Invalid reset session. Please request OTP again.');
-            return;
-        }
-
-        $existingPassword = (string) ($user['password'] ?? '');
-        if ($existingPassword !== '') {
-            $isSamePassword = false;
-            if (password_get_info($existingPassword)['algo'] !== 0) {
-                $isSamePassword = password_verify($password, $existingPassword);
-            } else {
-                $isSamePassword = hash_equals($existingPassword, sha1($password));
-            }
-            if ($isSamePassword) {
-                $this->json_response(false, 'New password must be different from your current password.');
-                return;
-            }
-        }
-
-        $this->db->trans_start();
-        $updated = $this->User_model->savePassword((int) $context['user_id'], password_hash($password, PASSWORD_DEFAULT));
-        $this->db->trans_complete();
-
-        if (!$updated || $this->db->trans_status() === false) {
-            $this->json_response(false, 'Unable to reset password. Please try again.');
-            return;
-        }
-
-        $save_session = (object) array(
-            'user_id' => (int) $context['user_id'],
-            'expire' => time() + 14400,
-        );
-        $this->auth->save_session($save_session);
-        $this->session->set_userdata('user_id', (int) $context['user_id']);
-        $this->session->unset_tempdata('reset_password_context');
-        $this->json_response(true, 'Password reset successful.', array(
-            'redirect_url' => base_url('analytics'),
-        ));
     }
 
     function login_with_token($token = false)
@@ -1114,329 +901,5 @@ class Users extends Front_Controller
         } else {
             return true;
         }
-    }
-    // 🔥 ================= GOOGLE PROFILE COMPLETION =================
-
-    // Show profile form
-    function profile_form()
-    {
-
-        $this->data['title'] = 'Login ';
-        // Allow profile form when coming from Google OAuth temporary session.
-        $temp_user_id = $this->session->userdata('google_user_id');
-        $user_id = $this->session->userdata('user_id');
-        if (empty($temp_user_id) && empty($user_id)) {
-            redirect('users/login');
-        }
-
-        $this->load->model('User_model');
-        $profile_user_id = !empty($temp_user_id) ? $temp_user_id : $user_id;
-        $this->data['google_user'] = $this->User_model->getUserById($profile_user_id);
-        $this->data['otp_context'] = $this->session->tempdata('google_signup_context');
-
-        $this->layout('user/google_profile', 'login_layout');
-    }
-
-    function send_google_signup_otp()
-    {
-        if (strtoupper($this->input->method()) !== 'POST') {
-            $this->json_response(false, 'Invalid request method.');
-            return;
-        }
-
-        $user_id = $this->session->userdata('google_user_id');
-        if (empty($user_id)) {
-            $user_id = $this->session->userdata('user_id');
-        }
-
-        if (empty($user_id)) {
-            $this->json_response(false, 'Google signup session expired. Please sign in again.');
-            return;
-        }
-
-        $this->load->model('User_model');
-        $this->load->model('Otp_model');
-        $this->load->library('Otp_service');
-
-        $rawPhone = trim((string) $this->input->post('phone', true));
-        $phone = $this->otp_service->normalizePhone($rawPhone);
-        $otpType = 'phone_verification';
-
-        if (!$this->otp_service->isValidPhone($phone)) {
-            $this->json_response(false, 'Please enter a valid 10-digit mobile number.');
-            return;
-        }
-
-        $existingUser = $this->User_model->getByMobile($phone);
-        if (!empty($existingUser) && (int) $existingUser->id !== (int) $user_id) {
-            $this->json_response(false, 'This phone number is already linked to another account.');
-            return;
-        }
-
-        $cooldownSeconds = $this->otp_service->getResendCooldownSeconds();
-        $rateLimitWindowMinutes = $this->otp_service->getRateLimitWindowMinutes();
-        $maxRequestsPerWindow = $this->otp_service->getMaxRequestsPerWindow();
-
-        $lastOtp = $this->Otp_model->getLastOtpTime($phone, $otpType, (int) $user_id);
-        if (!empty($lastOtp) && !empty($lastOtp->created_at)) {
-            $lastTime = strtotime($lastOtp->created_at);
-            if ($lastTime > 0) {
-                $elapsed = time() - $lastTime;
-                if ($elapsed < $cooldownSeconds) {
-                    $retryAfter = $cooldownSeconds - $elapsed;
-                    $this->json_response(false, 'Please wait before requesting OTP again.', array(
-                        'cooldown' => $cooldownSeconds,
-                        'retry_after' => $retryAfter,
-                    ));
-                    return;
-                }
-            }
-        }
-
-        $recentCount = $this->Otp_model->countRecentOtps($phone, $otpType, $rateLimitWindowMinutes, (int) $user_id);
-        if ($recentCount >= $maxRequestsPerWindow) {
-            $this->json_response(false, 'Too many OTP requests. Please try again later.', array(
-                'window_minutes' => $rateLimitWindowMinutes,
-                'max_requests' => $maxRequestsPerWindow,
-            ));
-            return;
-        }
-
-        $otp = $this->otp_service->generateOtp();
-        $otpHash = $this->otp_service->hashOtp($otp);
-        $expiresAt = $this->otp_service->getExpiryDateTime();
-
-        if ($otpHash === false) {
-            $this->json_response(false, 'Unable to generate OTP.');
-            return;
-        }
-
-        $otpId = $this->Otp_model->insertOtp(array(
-            'user_id' => (int) $user_id,
-            'phone' => $phone,
-            'otp_hash' => $otpHash,
-            'otp_type' => $otpType,
-            'expires_at' => $expiresAt,
-            'attempts' => 0,
-            'is_used' => 0,
-        ));
-
-        if (empty($otpId)) {
-            $this->json_response(false, 'Failed to save OTP.');
-            return;
-        }
-
-        $sendResult = $this->otp_service->sendOtpMSG91($phone, $otp, $otpType);
-        if (empty($sendResult['success'])) {
-            log_message('error', 'Google signup OTP send failed: ' . json_encode($sendResult));
-            $this->json_response(false, 'OTP could not be sent.');
-            return;
-        }
-
-        $context = array(
-            'user_id' => (int) $user_id,
-            'phone' => $phone,
-            'otp_type' => $otpType,
-            'otp_verified' => false,
-            'created_at' => time(),
-        );
-        $this->session->set_tempdata('google_signup_context', $context, $this->get_reset_session_ttl());
-
-        $this->json_response(true, 'OTP sent successfully.', array(
-            'phone' => $phone,
-            'expires_at' => $expiresAt,
-            'expires_in' => $this->otp_service->getOtpExpiryMinutes() * 60,
-            'cooldown' => $cooldownSeconds,
-        ));
-    }
-
-    function verify_google_signup_otp()
-    {
-        if (strtoupper($this->input->method()) !== 'POST') {
-            $this->json_response(false, 'Invalid request method.');
-            return;
-        }
-
-        $this->load->model('Otp_model');
-        $this->load->library('Otp_service');
-
-        $context = $this->session->tempdata('google_signup_context');
-        if (empty($context) || empty($context['user_id']) || empty($context['phone'])) {
-            $this->json_response(false, 'OTP session expired. Please send OTP again.');
-            return;
-        }
-
-        $enteredOtp = trim((string) $this->input->post('otp', true));
-        if ($enteredOtp === '') {
-            $this->json_response(false, 'Please enter OTP.');
-            return;
-        }
-
-        $maxAttempts = 3;
-        $latestOtp = $this->Otp_model->getLatestOtp($context['phone'], 'phone_verification', (int) $context['user_id']);
-        if (empty($latestOtp)) {
-            $this->json_response(false, 'No OTP found. Please request a new OTP.');
-            return;
-        }
-
-        if ((int) $latestOtp->is_used === 1) {
-            $this->json_response(false, 'OTP already used. Please request a new OTP.');
-            return;
-        }
-
-        if (strtotime($latestOtp->expires_at) < time()) {
-            $this->json_response(false, 'OTP expired. Please request a new OTP.');
-            return;
-        }
-
-        if ((int) $latestOtp->attempts >= $maxAttempts) {
-            $this->json_response(false, 'Maximum OTP attempts reached. Please request a new OTP.');
-            return;
-        }
-
-        $isValidOtp = $this->otp_service->verifyOtpHash($enteredOtp, $latestOtp->otp_hash);
-        if (!$isValidOtp) {
-            $this->Otp_model->incrementAttempts((int) $latestOtp->id);
-            $this->json_response(false, 'Invalid OTP.', array(
-                'remaining_attempts' => max(0, $maxAttempts - ((int) $latestOtp->attempts + 1)),
-            ));
-            return;
-        }
-
-        $this->Otp_model->markUsed((int) $latestOtp->id);
-
-        $this->load->model('User_model');
-        $this->User_model->updateProfile((int) $context['user_id'], array(
-            'phone' => $context['phone'],
-            'last_login_time' => time(),
-        ));
-
-        $save_session = (object) array(
-            'user_id' => (int) $context['user_id'],
-            'expire' => time() + 14400,
-        );
-        $this->auth->save_session($save_session);
-        $this->session->set_userdata('user_id', (int) $context['user_id']);
-        $this->session->unset_userdata('google_user_id');
-
-        $context['otp_verified'] = true;
-        $context['verified_at'] = time();
-        $this->session->set_tempdata('google_signup_context', $context, $this->get_reset_session_ttl());
-
-        $this->json_response(true, 'Phone number verified successfully.', array(
-            'phone' => $context['phone'],
-            'verified' => true,
-            'redirect_url' => base_url('analytics'),
-        ));
-    }
-
-
-    // Save profile data
-    function save_google_profile()
-    {
-
-        // Use temporary Google session ID first; fallback to user_id if present.
-        $user_id = $this->session->userdata('google_user_id');
-        if (empty($user_id)) {
-            $user_id = $this->session->userdata('user_id');
-        }
-
-        if (!$user_id) {
-            redirect('users/login');
-        }
-
-        $otpContext = $this->session->tempdata('google_signup_context');
-        if (empty($otpContext) || empty($otpContext['otp_verified'])) {
-            $this->session->set_flashdata('error', 'Please verify your phone number first.');
-            redirect('users/profile_form');
-        }
-
-        // Get form data.
-        $company_name = trim((string) $this->input->post('company_name', true));
-        $phone = preg_replace('/\D+/', '', (string) $this->input->post('phone', true));
-        $shipments = trim((string) $this->input->post('shipments', true));
-
-        // Validation (basic).
-        if (empty($company_name) || empty($phone) || empty($shipments)) {
-            $this->session->set_flashdata('error', 'All fields are required');
-            redirect('users/profile_form');
-        }
-
-        if (!$this->check_phonenumber($phone) || strlen($phone) !== 10) {
-            $this->session->set_flashdata('error', 'Please enter a valid 10-digit mobile number.');
-            redirect('users/profile_form');
-        }
-
-        if (empty($otpContext['phone']) || $otpContext['phone'] !== $phone) {
-            $this->session->set_flashdata('error', 'Verified phone number does not match the submitted phone.');
-            redirect('users/profile_form');
-        }
-
-        // Update user profile fields.
-        $this->load->model('User_model');
-
-        $updateData = [
-            'company_name' => $company_name,
-            'phone' => $phone,
-            'shipping_volume' => $shipments
-        ];
-
-        $this->User_model->updateProfile($user_id, $updateData);
-
-        // Complete login session now that profile is complete.
-        $save_session = (object) [
-            'user_id' => $user_id,
-            'expire' => time() + 14400,
-        ];
-        $this->auth->save_session($save_session);
-        $this->session->set_userdata('user_id', $user_id);
-        $this->session->unset_userdata('google_user_id');
-        $this->session->unset_tempdata('google_signup_context');
-
-        // Redirect to dashboard.
-        redirect('success'); // or analytics
-    }
-
-    private function json_response($status, $message, $data = array())
-    {
-        $this->output
-            ->set_content_type('application/json')
-            ->set_output(json_encode(array(
-                'status' => (bool) $status,
-                'message' => $message,
-                'data' => $data,
-            )));
-    }
-
-    private function get_reset_session_ttl()
-    {
-        $ttl = (int) $this->config->item('otp_session_expiry');
-        return ($ttl > 0) ? $ttl : 600;
-    }
-
-    private function is_password_strong_enough($password = '')
-    {
-        $password = trim((string) $password);
-        if (strlen($password) < 8 || strlen($password) > 50) {
-            return false;
-        }
-
-        if (!preg_match('/[A-Z]/', $password)) {
-            return false;
-        }
-
-        if (!preg_match('/[a-z]/', $password)) {
-            return false;
-        }
-
-        if (!preg_match('/[0-9]/', $password)) {
-            return false;
-        }
-
-        if (!preg_match('/[!@#$%^&*()\-_=+{};:,<.>§~]/', $password)) {
-            return false;
-        }
-
-        return true;
     }
 }

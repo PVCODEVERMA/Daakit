@@ -1,0 +1,16 @@
+[data-header-style="light"] {
+    .app-header {
+        --header-bg: #fff;
+        --border: #f0f2fd;
+    }
+    .responsive-logo .main-logo .desktop-logo {
+        display: none;
+
+        &.desktop-logo-dark {
+            display: block;
+        }
+    }
+    .app-header .dropdown-menu {
+        border: 1px solid rgba(255, 255, 255, 0.1)
+    }
+}

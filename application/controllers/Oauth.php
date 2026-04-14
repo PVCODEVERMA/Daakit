@@ -29,12 +29,6 @@ class Oauth extends MY_Controller
                 break;
 
             case 'google':
-                $flow = strtolower(trim((string) $this->input->get('flow')));
-                if (!in_array($flow, array('signup', 'login'), true)) {
-                    $flow = 'login';
-                }
-                $this->session->set_tempdata('google_oauth_flow', $flow, 600);
-
                 $client = new Google_Client();
 
                 // ADD YOUR OWN DETAILS HERE
@@ -84,11 +78,6 @@ class Oauth extends MY_Controller
     // GOOGLE RESPONSE FUNCTION
     function google_response()
     {
-        $flow = $this->session->tempdata('google_oauth_flow');
-        if (!in_array($flow, array('signup', 'login'), true)) {
-            $flow = 'login';
-        }
-
         $client = new Google_Client();
 
         // ADD YOUR OWN DETAILS HERE
@@ -133,13 +122,7 @@ class Oauth extends MY_Controller
         }
 
         $user = $this->User_model->getByEmail($email);
-        if ($flow === 'login' && empty($user)) {
-            $this->session->set_flashdata('error', 'No Google account found. Please sign up first.');
-            redirect('users/signup');
-            return;
-        }
-
-        if ($flow === 'signup' && empty($user)) {
+        if (empty($user)) {
             $insertData = [
                 'fname' => $data->name,
                 'email' => $data->email,
@@ -156,34 +139,20 @@ class Oauth extends MY_Controller
             redirect('users/login');
             return;
         }
-        //to check if the user is active or not
+//to check if the user is active or not
         if (isset($user->status) && (string) $user->status === '0') {
             $this->session->set_flashdata('error', 'Your account is inactive. Please contact support.');
             redirect('users/login');
             return;
         }
 
-        if (empty($user->phone)) {
+        $this->User_model->update($user->id, ['last_login_time' => time()]);
+
+        if (empty($user->company_name) || empty($user->phone) || empty($user->shipping_volume)) {
             // Keep temporary user id for profile completion before full auth login.
             $this->session->set_userdata('google_user_id', $user->id);
             $this->session->set_userdata('user_id', $user->id);
             redirect('users/profile_form');
-            return;
-        }
-
-        $this->User_model->update($user->id, ['last_login_time' => time()]);
-
-        if ($flow === 'login') {
-            $save_session = (object) [
-                'user_id' => $user->id,
-                'expire' => time() + 14400,
-            ];
-            $this->auth->save_session($save_session);
-            $this->session->set_userdata('user_id', $user->id);
-            $this->session->unset_userdata('google_user_id');
-            $this->session->unset_tempdata('google_signup_context');
-
-            redirect('analytics');
             return;
         }
 
@@ -194,9 +163,8 @@ class Oauth extends MY_Controller
         $this->auth->save_session($save_session);
         $this->session->set_userdata('user_id', $user->id);
         $this->session->unset_userdata('google_user_id');
-        $this->session->unset_tempdata('google_signup_context');
 
-        redirect('analytics');
+        redirect('success');
     }
 
     // EXISTING AMAZON FUNCTION (UNCHANGED)

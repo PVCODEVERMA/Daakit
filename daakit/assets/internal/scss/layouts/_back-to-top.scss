@@ -1,0 +1,31 @@
+/*-----Back to Top-----*/
+
+
+#back-to-top {
+	color: $custom-white;
+	position: fixed;
+	inset-block-end: 1.25rem;
+	inset-inline-end: 1.25rem;
+	z-index: 99;
+	border-radius: 0.25rem;
+	background-color: #{$primary};
+	display: none;
+	text-align: center;
+	height: 3.125rem;
+	width: 3.125rem;
+	background-repeat: no-repeat;
+	background-position: center;
+	transition: background-color 0.1s linear;
+	-moz-transition: background-color 0.1s linear;
+	-webkit-transition: background-color 0.1s linear;
+	-o-transition: background-color 0.1s linear;
+	i {
+		padding-top: 0.938rem;
+		font-size: 1rem;
+	}
+	&:hover {
+		background: #{$primary-005};
+		color: #{$primary};
+    	border: 2px solid #{$primary-05};
+	}
+}

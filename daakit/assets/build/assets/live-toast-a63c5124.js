@@ -1,0 +1,1 @@
+(function(t){var o=[].slice.call(document.querySelectorAll(".toast"));o.map(function(n){return new bootstrap.Toast(n)}),t(document).on("click","#liveToastBtn",function(){t(".toast").toast("show")})})(jQuery);

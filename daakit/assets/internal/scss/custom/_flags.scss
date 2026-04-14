@@ -1,0 +1,775 @@
+.flag {
+	width: 1.6rem;
+	height: 1.2rem;
+	display: inline-block;
+	background: no-repeat center/100% 100%;
+	vertical-align: bottom;
+	font-style: normal;
+	box-shadow: 0 0 1px 1px $black-1;
+	border-radius: 2px;
+}
+.flag-ad {
+	background-image: url("http://127.0.0.1:8000/build/assets/images/flags/ad.svg");
+}
+.flag-ae {
+	background-image: url("http://127.0.0.1:8000/build/assets/images/flags/ae.svg");
+}
+.flag-af {
+	background-image: url("http://127.0.0.1:8000/build/assets/images/flags/af.svg");
+}
+.flag-ag {
+	background-image: url("http://127.0.0.1:8000/build/assets/images/flags/ag.svg");
+}
+.flag-ai {
+	background-image: url("http://127.0.0.1:8000/build/assets/images/flags/ai.svg");
+}
+.flag-al {
+	background-image: url("http://127.0.0.1:8000/build/assets/images/flags/al.svg");
+}
+.flag-am {
+	background-image: url("http://127.0.0.1:8000/build/assets/images/flags/am.svg");
+}
+.flag-ao {
+	background-image: url("http://127.0.0.1:8000/build/assets/images/flags/ao.svg");
+}
+.flag-aq {
+	background-image: url("http://127.0.0.1:8000/build/assets/images/flags/aq.svg");
+}
+.flag-ar {
+	background-image: url("http://127.0.0.1:8000/build/assets/images/flags/ar.svg");
+}
+.flag-as {
+	background-image: url("http://127.0.0.1:8000/build/assets/images/flags/as.svg");
+}
+.flag-at {
+	background-image: url("http://127.0.0.1:8000/build/assets/images/flags/at.svg");
+}
+.flag-au {
+	background-image: url("http://127.0.0.1:8000/build/assets/images/flags/au.svg");
+}
+.flag-aw {
+	background-image: url("http://127.0.0.1:8000/build/assets/images/flags/aw.svg");
+}
+.flag-ax {
+	background-image: url("http://127.0.0.1:8000/build/assets/images/flags/ax.svg");
+}
+.flag-az {
+	background-image: url("http://127.0.0.1:8000/build/assets/images/flags/az.svg");
+}
+.flag-ba {
+	background-image: url("http://127.0.0.1:8000/build/assets/images/flags/ba.svg");
+}
+.flag-bb {
+	background-image: url("http://127.0.0.1:8000/build/assets/images/flags/bb.svg");
+}
+.flag-bd {
+	background-image: url("http://127.0.0.1:8000/build/assets/images/flags/bd.svg");
+}
+.flag-be {
+	background-image: url("http://127.0.0.1:8000/build/assets/images/flags/be.svg");
+}
+.flag-bf {
+	background-image: url("http://127.0.0.1:8000/build/assets/images/flags/bf.svg");
+}
+.flag-bg {
+	background-image: url("http://127.0.0.1:8000/build/assets/images/flags/bg.svg");
+}
+.flag-bh {
+	background-image: url("http://127.0.0.1:8000/build/assets/images/flags/bh.svg");
+}
+.flag-bi {
+	background-image: url("http://127.0.0.1:8000/build/assets/images/flags/bi.svg");
+}
+.flag-bj {
+	background-image: url("http://127.0.0.1:8000/build/assets/images/flags/bj.svg");
+}
+.flag-bl {
+	background-image: url("http://127.0.0.1:8000/build/assets/images/flags/bl.svg");
+}
+.flag-bm {
+	background-image: url("http://127.0.0.1:8000/build/assets/images/flags/bm.svg");
+}
+.flag-bn {
+	background-image: url("http://127.0.0.1:8000/build/assets/images/flags/bn.svg");
+}
+.flag-bo {
+	background-image: url("http://127.0.0.1:8000/build/assets/images/flags/bo.svg");
+}
+.flag-bq {
+	background-image: url("http://127.0.0.1:8000/build/assets/images/flags/bq.svg");
+}
+.flag-br {
+	background-image: url("http://127.0.0.1:8000/build/assets/images/flags/br.svg");
+}
+.flag-bs {
+	background-image: url("http://127.0.0.1:8000/build/assets/images/flags/bs.svg");
+}
+.flag-bt {
+	background-image: url("http://127.0.0.1:8000/build/assets/images/flags/bt.svg");
+}
+.flag-bv {
+	background-image: url("http://127.0.0.1:8000/build/assets/images/flags/bv.svg");
+}
+.flag-bw {
+	background-image: url("http://127.0.0.1:8000/build/assets/images/flags/bw.svg");
+}
+.flag-by {
+	background-image: url("http://127.0.0.1:8000/build/assets/images/flags/by.svg");
+}
+.flag-bz {
+	background-image: url("http://127.0.0.1:8000/build/assets/images/flags/bz.svg");
+}
+.flag-ca {
+	background-image: url("http://127.0.0.1:8000/build/assets/images/flags/ca.svg");
+}
+.flag-cc {
+	background-image: url("http://127.0.0.1:8000/build/assets/images/flags/cc.svg");
+}
+.flag-cd {
+	background-image: url("http://127.0.0.1:8000/build/assets/images/flags/cd.svg");
+}
+.flag-cf {
+	background-image: url("http://127.0.0.1:8000/build/assets/images/flags/cf.svg");
+}
+.flag-cg {
+	background-image: url("http://127.0.0.1:8000/build/assets/images/flags/cg.svg");
+}
+.flag-ch {
+	background-image: url("http://127.0.0.1:8000/build/assets/images/flags/ch.svg");
+}
+.flag-ci {
+	background-image: url("http://127.0.0.1:8000/build/assets/images/flags/ci.svg");
+}
+.flag-ck {
+	background-image: url("http://127.0.0.1:8000/build/assets/images/flags/ck.svg");
+}
+.flag-cl {
+	background-image: url("http://127.0.0.1:8000/build/assets/images/flags/cl.svg");
+}
+.flag-cm {
+	background-image: url("http://127.0.0.1:8000/build/assets/images/flags/cm.svg");
+}
+.flag-cn {
+	background-image: url("http://127.0.0.1:8000/build/assets/images/flags/cn.svg");
+}
+.flag-co {
+	background-image: url("http://127.0.0.1:8000/build/assets/images/flags/co.svg");
+}
+.flag-cr {
+	background-image: url("http://127.0.0.1:8000/build/assets/images/flags/cr.svg");
+}
+.flag-cu {
+	background-image: url("http://127.0.0.1:8000/build/assets/images/flags/cu.svg");
+}
+.flag-cv {
+	background-image: url("http://127.0.0.1:8000/build/assets/images/flags/cv.svg");
+}
+.flag-cw {
+	background-image: url("http://127.0.0.1:8000/build/assets/images/flags/cw.svg");
+}
+.flag-cx {
+	background-image: url("http://127.0.0.1:8000/build/assets/images/flags/cx.svg");
+}
+.flag-cy {
+	background-image: url("http://127.0.0.1:8000/build/assets/images/flags/cy.svg");
+}
+.flag-cz {
+	background-image: url("http://127.0.0.1:8000/build/assets/images/flags/cz.svg");
+}
+.flag-de {
+	background-image: url("http://127.0.0.1:8000/build/assets/images/flags/de.svg");
+}
+.flag-dj {
+	background-image: url("http://127.0.0.1:8000/build/assets/images/flags/dj.svg");
+}
+.flag-dk {
+	background-image: url("http://127.0.0.1:8000/build/assets/images/flags/dk.svg");
+}
+.flag-dm {
+	background-image: url("http://127.0.0.1:8000/build/assets/images/flags/dm.svg");
+}
+.flag-do {
+	background-image: url("http://127.0.0.1:8000/build/assets/images/flags/do.svg");
+}
+.flag-dz {
+	background-image: url("http://127.0.0.1:8000/build/assets/images/flags/dz.svg");
+}
+.flag-ec {
+	background-image: url("http://127.0.0.1:8000/build/assets/images/flags/ec.svg");
+}
+.flag-ee {
+	background-image: url("http://127.0.0.1:8000/build/assets/images/flags/ee.svg");
+}
+.flag-eg {
+	background-image: url("http://127.0.0.1:8000/build/assets/images/flags/eg.svg");
+}
+.flag-eh {
+	background-image: url("http://127.0.0.1:8000/build/assets/images/flags/eh.svg");
+}
+.flag-er {
+	background-image: url("http://127.0.0.1:8000/build/assets/images/flags/er.svg");
+}
+.flag-es {
+	background-image: url("http://127.0.0.1:8000/build/assets/images/flags/es.svg");
+}
+.flag-et {
+	background-image: url("http://127.0.0.1:8000/build/assets/images/flags/et.svg");
+}
+.flag-eu {
+	background-image: url("http://127.0.0.1:8000/build/assets/images/flags/eu.svg");
+}
+.flag-fi {
+	background-image: url("http://127.0.0.1:8000/build/assets/images/flags/fi.svg");
+}
+.flag-fj {
+	background-image: url("http://127.0.0.1:8000/build/assets/images/flags/fj.svg");
+}
+.flag-fk {
+	background-image: url("http://127.0.0.1:8000/build/assets/images/flags/fk.svg");
+}
+.flag-fm {
+	background-image: url("http://127.0.0.1:8000/build/assets/images/flags/fm.svg");
+}
+.flag-fo {
+	background-image: url("http://127.0.0.1:8000/build/assets/images/flags/fo.svg");
+}
+.flag-fr {
+	background-image: url("http://127.0.0.1:8000/build/assets/images/flags/fr.svg");
+}
+.flag-ga {
+	background-image: url("http://127.0.0.1:8000/build/assets/images/flags/ga.svg");
+}
+.flag-gb-eng {
+	background-image: url("http://127.0.0.1:8000/build/assets/images/flags/gb-eng.svg");
+}
+.flag-gb-nir {
+	background-image: url("http://127.0.0.1:8000/build/assets/images/flags/gb-nir.svg");
+}
+.flag-gb-sct {
+	background-image: url("http://127.0.0.1:8000/build/assets/images/flags/gb-sct.svg");
+}
+.flag-gb-wls {
+	background-image: url("http://127.0.0.1:8000/build/assets/images/flags/gb-wls.svg");
+}
+.flag-gb {
+	background-image: url("http://127.0.0.1:8000/build/assets/images/flags/gb.svg");
+}
+.flag-gd {
+	background-image: url("http://127.0.0.1:8000/build/assets/images/flags/gd.svg");
+}
+.flag-ge {
+	background-image: url("http://127.0.0.1:8000/build/assets/images/flags/ge.svg");
+}
+.flag-gf {
+	background-image: url("http://127.0.0.1:8000/build/assets/images/flags/gf.svg");
+}
+.flag-gg {
+	background-image: url("http://127.0.0.1:8000/build/assets/images/flags/gg.svg");
+}
+.flag-gh {
+	background-image: url("http://127.0.0.1:8000/build/assets/images/flags/gh.svg");
+}
+.flag-gi {
+	background-image: url("http://127.0.0.1:8000/build/assets/images/flags/gi.svg");
+}
+.flag-gl {
+	background-image: url("http://127.0.0.1:8000/build/assets/images/flags/gl.svg");
+}
+.flag-gm {
+	background-image: url("http://127.0.0.1:8000/build/assets/images/flags/gm.svg");
+}
+.flag-gn {
+	background-image: url("http://127.0.0.1:8000/build/assets/images/flags/gn.svg");
+}
+.flag-gp {
+	background-image: url("http://127.0.0.1:8000/build/assets/images/flags/gp.svg");
+}
+.flag-gq {
+	background-image: url("http://127.0.0.1:8000/build/assets/images/flags/gq.svg");
+}
+.flag-gr {
+	background-image: url("http://127.0.0.1:8000/build/assets/images/flags/gr.svg");
+}
+.flag-gs {
+	background-image: url("http://127.0.0.1:8000/build/assets/images/flags/gs.svg");
+}
+.flag-gt {
+	background-image: url("http://127.0.0.1:8000/build/assets/images/flags/gt.svg");
+}
+.flag-gu {
+	background-image: url("http://127.0.0.1:8000/build/assets/images/flags/gu.svg");
+}
+.flag-gw {
+	background-image: url("http://127.0.0.1:8000/build/assets/images/flags/gw.svg");
+}
+.flag-gy {
+	background-image: url("http://127.0.0.1:8000/build/assets/images/flags/gy.svg");
+}
+.flag-hk {
+	background-image: url("http://127.0.0.1:8000/build/assets/images/flags/hk.svg");
+}
+.flag-hm {
+	background-image: url("http://127.0.0.1:8000/build/assets/images/flags/hm.svg");
+}
+.flag-hn {
+	background-image: url("http://127.0.0.1:8000/build/assets/images/flags/hn.svg");
+}
+.flag-hr {
+	background-image: url("http://127.0.0.1:8000/build/assets/images/flags/hr.svg");
+}
+.flag-ht {
+	background-image: url("http://127.0.0.1:8000/build/assets/images/flags/ht.svg");
+}
+.flag-hu {
+	background-image: url("http://127.0.0.1:8000/build/assets/images/flags/hu.svg");
+}
+.flag-id {
+	background-image: url("http://127.0.0.1:8000/build/assets/images/flags/id.svg");
+}
+.flag-ie {
+	background-image: url("http://127.0.0.1:8000/build/assets/images/flags/ie.svg");
+}
+.flag-il {
+	background-image: url("http://127.0.0.1:8000/build/assets/images/flags/il.svg");
+}
+.flag-im {
+	background-image: url("http://127.0.0.1:8000/build/assets/images/flags/im.svg");
+}
+.flag-in {
+	background-image: url("http://127.0.0.1:8000/build/assets/images/flags/in.svg");
+}
+.flag-io {
+	background-image: url("http://127.0.0.1:8000/build/assets/images/flags/io.svg");
+}
+.flag-iq {
+	background-image: url("http://127.0.0.1:8000/build/assets/images/flags/iq.svg");
+}
+.flag-ir {
+	background-image: url("http://127.0.0.1:8000/build/assets/images/flags/ir.svg");
+}
+.flag-is {
+	background-image: url("http://127.0.0.1:8000/build/assets/images/flags/is.svg");
+}
+.flag-it {
+	background-image: url("http://127.0.0.1:8000/build/assets/images/flags/it.svg");
+}
+.flag-je {
+	background-image: url("http://127.0.0.1:8000/build/assets/images/flags/je.svg");
+}
+.flag-jm {
+	background-image: url("http://127.0.0.1:8000/build/assets/images/flags/jm.svg");
+}
+.flag-jo {
+	background-image: url("http://127.0.0.1:8000/build/assets/images/flags/jo.svg");
+}
+.flag-jp {
+	background-image: url("http://127.0.0.1:8000/build/assets/images/flags/jp.svg");
+}
+.flag-ke {
+	background-image: url("http://127.0.0.1:8000/build/assets/images/flags/ke.svg");
+}
+.flag-kg {
+	background-image: url("http://127.0.0.1:8000/build/assets/images/flags/kg.svg");
+}
+.flag-kh {
+	background-image: url("http://127.0.0.1:8000/build/assets/images/flags/kh.svg");
+}
+.flag-ki {
+	background-image: url("http://127.0.0.1:8000/build/assets/images/flags/ki.svg");
+}
+.flag-km {
+	background-image: url("http://127.0.0.1:8000/build/assets/images/flags/km.svg");
+}
+.flag-kn {
+	background-image: url("http://127.0.0.1:8000/build/assets/images/flags/kn.svg");
+}
+.flag-kp {
+	background-image: url("http://127.0.0.1:8000/build/assets/images/flags/kp.svg");
+}
+.flag-kr {
+	background-image: url("http://127.0.0.1:8000/build/assets/images/flags/kr.svg");
+}
+.flag-kw {
+	background-image: url("http://127.0.0.1:8000/build/assets/images/flags/kw.svg");
+}
+.flag-ky {
+	background-image: url("http://127.0.0.1:8000/build/assets/images/flags/ky.svg");
+}
+.flag-kz {
+	background-image: url("http://127.0.0.1:8000/build/assets/images/flags/kz.svg");
+}
+.flag-la {
+	background-image: url("http://127.0.0.1:8000/build/assets/images/flags/la.svg");
+}
+.flag-lb {
+	background-image: url("http://127.0.0.1:8000/build/assets/images/flags/lb.svg");
+}
+.flag-lc {
+	background-image: url("http://127.0.0.1:8000/build/assets/images/flags/lc.svg");
+}
+.flag-li {
+	background-image: url("http://127.0.0.1:8000/build/assets/images/flags/li.svg");
+}
+.flag-lk {
+	background-image: url("http://127.0.0.1:8000/build/assets/images/flags/lk.svg");
+}
+.flag-lr {
+	background-image: url("http://127.0.0.1:8000/build/assets/images/flags/lr.svg");
+}
+.flag-ls {
+	background-image: url("http://127.0.0.1:8000/build/assets/images/flags/ls.svg");
+}
+.flag-lt {
+	background-image: url("http://127.0.0.1:8000/build/assets/images/flags/lt.svg");
+}
+.flag-lu {
+	background-image: url("http://127.0.0.1:8000/build/assets/images/flags/lu.svg");
+}
+.flag-lv {
+	background-image: url("http://127.0.0.1:8000/build/assets/images/flags/lv.svg");
+}
+.flag-ly {
+	background-image: url("http://127.0.0.1:8000/build/assets/images/flags/ly.svg");
+}
+.flag-ma {
+	background-image: url("http://127.0.0.1:8000/build/assets/images/flags/ma.svg");
+}
+.flag-mc {
+	background-image: url("http://127.0.0.1:8000/build/assets/images/flags/mc.svg");
+}
+.flag-md {
+	background-image: url("http://127.0.0.1:8000/build/assets/images/flags/md.svg");
+}
+.flag-me {
+	background-image: url("http://127.0.0.1:8000/build/assets/images/flags/me.svg");
+}
+.flag-mf {
+	background-image: url("http://127.0.0.1:8000/build/assets/images/flags/mf.svg");
+}
+.flag-mg {
+	background-image: url("http://127.0.0.1:8000/build/assets/images/flags/mg.svg");
+}
+.flag-mh {
+	background-image: url("http://127.0.0.1:8000/build/assets/images/flags/mh.svg");
+}
+.flag-mk {
+	background-image: url("http://127.0.0.1:8000/build/assets/images/flags/mk.svg");
+}
+.flag-ml {
+	background-image: url("http://127.0.0.1:8000/build/assets/images/flags/ml.svg");
+}
+.flag-mm {
+	background-image: url("http://127.0.0.1:8000/build/assets/images/flags/mm.svg");
+}
+.flag-mn {
+	background-image: url("http://127.0.0.1:8000/build/assets/images/flags/mn.svg");
+}
+.flag-mo {
+	background-image: url("http://127.0.0.1:8000/build/assets/images/flags/mo.svg");
+}
+.flag-mp {
+	background-image: url("http://127.0.0.1:8000/build/assets/images/flags/mp.svg");
+}
+.flag-mq {
+	background-image: url("http://127.0.0.1:8000/build/assets/images/flags/mq.svg");
+}
+.flag-mr {
+	background-image: url("http://127.0.0.1:8000/build/assets/images/flags/mr.svg");
+}
+.flag-ms {
+	background-image: url("http://127.0.0.1:8000/build/assets/images/flags/ms.svg");
+}
+.flag-mt {
+	background-image: url("http://127.0.0.1:8000/build/assets/images/flags/mt.svg");
+}
+.flag-mu {
+	background-image: url("http://127.0.0.1:8000/build/assets/images/flags/mu.svg");
+}
+.flag-mv {
+	background-image: url("http://127.0.0.1:8000/build/assets/images/flags/mv.svg");
+}
+.flag-mw {
+	background-image: url("http://127.0.0.1:8000/build/assets/images/flags/mw.svg");
+}
+.flag-mx {
+	background-image: url("http://127.0.0.1:8000/build/assets/images/flags/mx.svg");
+}
+.flag-my {
+	background-image: url("http://127.0.0.1:8000/build/assets/images/flags/my.svg");
+}
+.flag-mz {
+	background-image: url("http://127.0.0.1:8000/build/assets/images/flags/mz.svg");
+}
+.flag-na {
+	background-image: url("http://127.0.0.1:8000/build/assets/images/flags/na.svg");
+}
+.flag-nc {
+	background-image: url("http://127.0.0.1:8000/build/assets/images/flags/nc.svg");
+}
+.flag-ne {
+	background-image: url("http://127.0.0.1:8000/build/assets/images/flags/ne.svg");
+}
+.flag-nf {
+	background-image: url("http://127.0.0.1:8000/build/assets/images/flags/nf.svg");
+}
+.flag-ng {
+	background-image: url("http://127.0.0.1:8000/build/assets/images/flags/ng.svg");
+}
+.flag-ni {
+	background-image: url("http://127.0.0.1:8000/build/assets/images/flags/ni.svg");
+}
+.flag-nl {
+	background-image: url("http://127.0.0.1:8000/build/assets/images/flags/nl.svg");
+}
+.flag-no {
+	background-image: url("http://127.0.0.1:8000/build/assets/images/flags/no.svg");
+}
+.flag-np {
+	background-image: url("http://127.0.0.1:8000/build/assets/images/flags/np.svg");
+}
+.flag-nr {
+	background-image: url("http://127.0.0.1:8000/build/assets/images/flags/nr.svg");
+}
+.flag-nu {
+	background-image: url("http://127.0.0.1:8000/build/assets/images/flags/nu.svg");
+}
+.flag-nz {
+	background-image: url("http://127.0.0.1:8000/build/assets/images/flags/nz.svg");
+}
+.flag-om {
+	background-image: url("http://127.0.0.1:8000/build/assets/images/flags/om.svg");
+}
+.flag-pa {
+	background-image: url("http://127.0.0.1:8000/build/assets/images/flags/pa.svg");
+}
+.flag-pe {
+	background-image: url("http://127.0.0.1:8000/build/assets/images/flags/pe.svg");
+}
+.flag-pf {
+	background-image: url("http://127.0.0.1:8000/build/assets/images/flags/pf.svg");
+}
+.flag-pg {
+	background-image: url("http://127.0.0.1:8000/build/assets/images/flags/pg.svg");
+}
+.flag-ph {
+	background-image: url("http://127.0.0.1:8000/build/assets/images/flags/ph.svg");
+}
+.flag-pk {
+	background-image: url("http://127.0.0.1:8000/build/assets/images/flags/pk.svg");
+}
+.flag-pl {
+	background-image: url("http://127.0.0.1:8000/build/assets/images/flags/pl.svg");
+}
+.flag-pm {
+	background-image: url("http://127.0.0.1:8000/build/assets/images/flags/pm.svg");
+}
+.flag-pn {
+	background-image: url("http://127.0.0.1:8000/build/assets/images/flags/pn.svg");
+}
+.flag-pr {
+	background-image: url("http://127.0.0.1:8000/build/assets/images/flags/pr.svg");
+}
+.flag-ps {
+	background-image: url("http://127.0.0.1:8000/build/assets/images/flags/ps.svg");
+}
+.flag-pt {
+	background-image: url("http://127.0.0.1:8000/build/assets/images/flags/pt.svg");
+}
+.flag-pw {
+	background-image: url("http://127.0.0.1:8000/build/assets/images/flags/pw.svg");
+}
+.flag-py {
+	background-image: url("http://127.0.0.1:8000/build/assets/images/flags/py.svg");
+}
+.flag-qa {
+	background-image: url("http://127.0.0.1:8000/build/assets/images/flags/qa.svg");
+}
+.flag-re {
+	background-image: url("http://127.0.0.1:8000/build/assets/images/flags/re.svg");
+}
+.flag-ro {
+	background-image: url("http://127.0.0.1:8000/build/assets/images/flags/ro.svg");
+}
+.flag-rs {
+	background-image: url("http://127.0.0.1:8000/build/assets/images/flags/rs.svg");
+}
+.flag-ru {
+	background-image: url("http://127.0.0.1:8000/build/assets/images/flags/ru.svg");
+}
+.flag-rw {
+	background-image: url("http://127.0.0.1:8000/build/assets/images/flags/rw.svg");
+}
+.flag-sa {
+	background-image: url("http://127.0.0.1:8000/build/assets/images/flags/sa.svg");
+}
+.flag-sb {
+	background-image: url("http://127.0.0.1:8000/build/assets/images/flags/sb.svg");
+}
+.flag-sc {
+	background-image: url("http://127.0.0.1:8000/build/assets/images/flags/sc.svg");
+}
+.flag-sd {
+	background-image: url("http://127.0.0.1:8000/build/assets/images/flags/sd.svg");
+}
+.flag-se {
+	background-image: url("http://127.0.0.1:8000/build/assets/images/flags/se.svg");
+}
+.flag-sg {
+	background-image: url("http://127.0.0.1:8000/build/assets/images/flags/sg.svg");
+}
+.flag-sh {
+	background-image: url("http://127.0.0.1:8000/build/assets/images/flags/sh.svg");
+}
+.flag-si {
+	background-image: url("http://127.0.0.1:8000/build/assets/images/flags/si.svg");
+}
+.flag-sj {
+	background-image: url("http://127.0.0.1:8000/build/assets/images/flags/sj.svg");
+}
+.flag-sk {
+	background-image: url("http://127.0.0.1:8000/build/assets/images/flags/sk.svg");
+}
+.flag-sl {
+	background-image: url("http://127.0.0.1:8000/build/assets/images/flags/sl.svg");
+}
+.flag-sm {
+	background-image: url("http://127.0.0.1:8000/build/assets/images/flags/sm.svg");
+}
+.flag-sn {
+	background-image: url("http://127.0.0.1:8000/build/assets/images/flags/sn.svg");
+}
+.flag-so {
+	background-image: url("http://127.0.0.1:8000/build/assets/images/flags/so.svg");
+}
+.flag-sr {
+	background-image: url("http://127.0.0.1:8000/build/assets/images/flags/sr.svg");
+}
+.flag-ss {
+	background-image: url("http://127.0.0.1:8000/build/assets/images/flags/ss.svg");
+}
+.flag-st {
+	background-image: url("http://127.0.0.1:8000/build/assets/images/flags/st.svg");
+}
+.flag-sv {
+	background-image: url("http://127.0.0.1:8000/build/assets/images/flags/sv.svg");
+}
+.flag-sx {
+	background-image: url("http://127.0.0.1:8000/build/assets/images/flags/sx.svg");
+}
+.flag-sy {
+	background-image: url("http://127.0.0.1:8000/build/assets/images/flags/sy.svg");
+}
+.flag-sz {
+	background-image: url("http://127.0.0.1:8000/build/assets/images/flags/sz.svg");
+}
+.flag-tc {
+	background-image: url("http://127.0.0.1:8000/build/assets/images/flags/tc.svg");
+}
+.flag-td {
+	background-image: url("http://127.0.0.1:8000/build/assets/images/flags/td.svg");
+}
+.flag-tf {
+	background-image: url("http://127.0.0.1:8000/build/assets/images/flags/tf.svg");
+}
+.flag-tg {
+	background-image: url("http://127.0.0.1:8000/build/assets/images/flags/tg.svg");
+}
+.flag-th {
+	background-image: url("http://127.0.0.1:8000/build/assets/images/flags/th.svg");
+}
+.flag-tj {
+	background-image: url("http://127.0.0.1:8000/build/assets/images/flags/tj.svg");
+}
+.flag-tk {
+	background-image: url("http://127.0.0.1:8000/build/assets/images/flags/tk.svg");
+}
+.flag-tl {
+	background-image: url("http://127.0.0.1:8000/build/assets/images/flags/tl.svg");
+}
+.flag-tm {
+	background-image: url("http://127.0.0.1:8000/build/assets/images/flags/tm.svg");
+}
+.flag-tn {
+	background-image: url("http://127.0.0.1:8000/build/assets/images/flags/tn.svg");
+}
+.flag-to {
+	background-image: url("http://127.0.0.1:8000/build/assets/images/flags/to.svg");
+}
+.flag-tr {
+	background-image: url("http://127.0.0.1:8000/build/assets/images/flags/tr.svg");
+}
+.flag-tt {
+	background-image: url("http://127.0.0.1:8000/build/assets/images/flags/tt.svg");
+}
+.flag-tv {
+	background-image: url("http://127.0.0.1:8000/build/assets/images/flags/tv.svg");
+}
+.flag-tw {
+	background-image: url("http://127.0.0.1:8000/build/assets/images/flags/tw.svg");
+}
+.flag-tz {
+	background-image: url("http://127.0.0.1:8000/build/assets/images/flags/tz.svg");
+}
+.flag-ua {
+	background-image: url("http://127.0.0.1:8000/build/assets/images/flags/ua.svg");
+}
+.flag-ug {
+	background-image: url("http://127.0.0.1:8000/build/assets/images/flags/ug.svg");
+}
+.flag-um {
+	background-image: url("http://127.0.0.1:8000/build/assets/images/flags/um.svg");
+}
+.flag-un {
+	background-image: url("http://127.0.0.1:8000/build/assets/images/flags/un.svg");
+}
+.flag-us {
+	background-image: url("http://127.0.0.1:8000/build/assets/images/flags/us.svg");
+}
+.flag-uy {
+	background-image: url("http://127.0.0.1:8000/build/assets/images/flags/uy.svg");
+}
+.flag-uz {
+	background-image: url("http://127.0.0.1:8000/build/assets/images/flags/uz.svg");
+}
+.flag-va {
+	background-image: url("http://127.0.0.1:8000/build/assets/images/flags/va.svg");
+}
+.flag-vc {
+	background-image: url("http://127.0.0.1:8000/build/assets/images/flags/vc.svg");
+}
+.flag-ve {
+	background-image: url("http://127.0.0.1:8000/build/assets/images/flags/ve.svg");
+}
+.flag-vg {
+	background-image: url("http://127.0.0.1:8000/build/assets/images/flags/vg.svg");
+}
+.flag-vi {
+	background-image: url("http://127.0.0.1:8000/build/assets/images/flags/vi.svg");
+}
+.flag-vn {
+	background-image: url("http://127.0.0.1:8000/build/assets/images/flags/vn.svg");
+}
+.flag-vu {
+	background-image: url("http://127.0.0.1:8000/build/assets/images/flags/vu.svg");
+}
+.flag-wf {
+	background-image: url("http://127.0.0.1:8000/build/assets/images/flags/wf.svg");
+}
+.flag-ws {
+	background-image: url("http://127.0.0.1:8000/build/assets/images/flags/ws.svg");
+}
+.flag-ye {
+	background-image: url("http://127.0.0.1:8000/build/assets/images/flags/ye.svg");
+}
+.flag-yt {
+	background-image: url("http://127.0.0.1:8000/build/assets/images/flags/yt.svg");
+}
+.flag-za {
+	background-image: url("http://127.0.0.1:8000/build/assets/images/flags/za.svg");
+}
+.flag-zm {
+	background-image: url("http://127.0.0.1:8000/build/assets/images/flags/zm.svg");
+}
+.flag-zw {
+	background-image: url("http://127.0.0.1:8000/build/assets/images/flags/zw.svg");
+}

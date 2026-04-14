@@ -1,0 +1,232 @@
+/*------ Accordion -------*/
+
+.accordion .card {
+	&:not(:first-of-type) {
+		&:not(:last-of-type) {
+			border-block-end: 0;
+			border-radius: 0;
+		}
+		.card-header:first-child {
+			border-radius: 0;
+		}
+	}
+	&:first-of-type {
+		border-block-end: 0;
+		border-end-end-radius: 0;
+		border-end-start-radius: 0;
+	}
+	&:last-of-type {
+		border-start-start-radius: 0;
+		border-start-end-radius: 0;
+	}
+}
+.example .pagination {
+	margin-block-end: 0;
+}
+/*-------Accordion-----------*/
+
+.panel-group .panel {
+	border-radius: 0;
+	box-shadow: none;
+	border-color: $border;
+}
+.panel-default>.panel-heading {
+	padding: 0;
+	border-radius: 0;
+	background-color: $background;
+	border-radius: $card-border-radius;
+}
+.panel-title {
+	font-size: 14px;
+	margin-block-end: 0;
+	>a {
+		display: block;
+		padding: 15px;
+		text-decoration: none;
+	}
+}
+.more-less {
+	float: end;
+	color: #212121;
+}
+.panel-default>.panel-heading+.panel-collapse>.panel-body {
+	border: 1px solid $border;
+}
+/* ----- v CAN BE DELETED v ----- */
+
+.wrap {
+	box-shadow: 0px 2px 2px 0px rgba(0, 0, 0, 0.14), 0px 3px 1px -2px $black-2, 0px 1px 5px 0px rgba(0, 0, 0, 0.12);
+	border-radius: 4px;
+}
+a {
+	&:focus, &:hover, &:active {
+		outline: 0;
+		text-decoration: none;
+	}
+}
+.panel1 {
+	border-block-start: 0;
+	border-block-end: 1px;
+	border-inline: 0;
+	border-style: solid;
+	border-color: $white;
+	background: none;
+	box-shadow: none;
+	&:last-child {
+		border-block-end: none;
+	}
+}
+.panel-group1 {
+	>.panel1:first-child .panel-heading1 {
+		border-start-start-radius: 4px;
+		border-start-end-radius: 4px;
+		border-end-start-radius: 0;
+		border-end-end-radius: 0;
+	}
+	.panel1 {
+		border-radius: 0;
+	}
+}
+.panel-body1 {
+	padding: 10px;
+}
+.panel-title1 {
+	font-size: 14px;
+	margin-block-end: 0;
+}
+.panel-group1 .panel1+.panel1 {
+	margin-block-start: 0;
+}
+.panel-heading1 {
+	background-color: #{$primary};
+	border-radius: 0;
+	border: none;
+	color: $custom-white;
+	padding: 0;
+}
+.panel-group1 .panel-body {
+	border: 1px solid $border;
+}
+.panel-title1 a {
+	display: block;
+	color: $custom-white;
+	padding: 10px;
+	position: relative;
+	font-size: 1rem;
+	background: #{$primary};
+	font-weight: 400;
+	&:hover {
+		color: $custom-white;
+	}
+}
+.panel-body1 {
+	background: $white;
+}
+.panel1:last-child {
+	.panel-body1 {
+		border-start-end-radius: 0;
+		border-start-end-radius: 0;
+		border-end-start-radius: 4px;
+		border-end-end-radius: 4px;
+	}
+	.panel-heading1 {
+		border-start-end-radius: 0;
+		border-start-end-radius: 0;
+		border-end-start-radius: 4px;
+		border-end-end-radius: 4px;
+		transition: border-radius 0.3s linear 0.2s;
+		&.active {
+			border-radius: 0;
+			transition: border-radius linear 0s;
+		}
+	}
+}
+/* #bs-collapse icon scale option */
+
+.panel-title a.accordion-toggle {
+	&:before {
+		content: "\f068";
+		padding-block: 0;
+		padding-inline-start: 0;
+		padding-inline-end: 10px;
+		color: $white;
+		font-family: FontAwesome;
+		float: $float-end;
+	}
+	&.collapsed:before {
+		content: "\f067";
+		padding-block: 0;
+		padding-inline-start: 0;
+		padding-inline-end: 10px;
+		color: $white;
+		font-family: FontAwesome;
+		float: $float-end;
+	}
+}
+.panel-heading1 {
+	a {
+		&.collapsed:before {
+			content: "\e9af";
+			position: absolute;
+			font-family: 'feather' !important;
+			inset-inline-end: 10px;
+			inset-block-start: 7px;
+			font-size: 20px;
+			transition: all 0.5s;
+			transform: scale(1);
+		}
+		&:before {
+			content: "\e994";
+			position: absolute;
+			font-family: 'feather' !important;
+			inset-inline-end: 10px;
+			inset-block-start: 7px;
+			font-size: 20px;
+			transition: all 0.5s;
+			transform: scale(1);
+		}
+	}
+	&.active a:before {
+		content: ' ';
+		transition: all 0.5s;
+		transform: scale(0);
+	}
+}
+.demo-accordion p:last-child, .panel-group1 p:last-child {
+	margin-block-end: 0;
+}
+#bs-collapse .panel-heading1 {
+	a:after {
+		content: "\f01a";
+		font-size: 24px;
+		position: absolute;
+		font-family: 'FontAwesome';
+		inset-inline-end: 5px;
+		inset-block-start: 10px;
+		transform: scale(0);
+		transition: all 0.5s;
+	}
+	&.active a:after {
+		content: "\f01a";
+		transform: scale(1);
+		transition: all 0.5s;
+	}
+}
+/* #accordion rotate icon option */
+
+#accordion .panel-heading1 {
+	a:before {
+		content: "\f01a";
+		font-size: 24px;
+		position: absolute;
+		font-family: 'FontAwesome';
+		inset-inline-end: 5px;
+		inset-block-start: 10px;
+		transform: rotate(180deg);
+		transition: all 0.5s;
+	}
+	&.active a:before {
+		transform: rotate(0deg);
+		transition: all 0.5s;
+	}
+}

@@ -333,4 +333,9 @@ class Analytics extends User_controller
         $this->data['json'] = array('success' => 'You have Successfully Accepted the Agreement');
         $this->layout(false, 'json');
     }
+
+    function kyc()
+    {
+        $this->layout('kyc/kyc');
+    }
 }

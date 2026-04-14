@@ -1,0 +1,252 @@
+<?php
+$config['admin_permissions'] = array(
+    'dashboard' => array(
+        'dashboard' => 'Domestic Dashboard',
+        'enable_b2b_dashboard' => 'B2B Dashboard',
+        'enable_int_dashboard' => 'International Dashboard',
+    ),
+    'orders' => array(
+        'orders' => 'View Orders',
+        'view_seller_detail' => 'View Seller Detail',
+        'view_customer_detail' =>  'View Customer Detail',
+        'view_product_detail' => 'View Product Detail',
+        'orders_export' => 'Export Orders',
+    ),
+    'cargo_orders_view' => array(
+        'cargo_orders_view' => 'View Cargo Orders',
+        'cargo_orders_export' => 'Export Cargo Orders',
+    ),
+    'shipments' => array(
+        'shipments' => 'View Shipments',
+        'shipment_seller_detail' => 'Shipment Seller Detail',
+        'shipment_product_detail' => 'Shipment Product Detail',
+        'shipment_customer_detail'  => 'Shipment Customer Detail',
+        'shipment_warehouse_detail'  => 'Shipment Warehouse Detail',
+        'shipment_weight_detail' => 'Shipment Weight Detail',
+        'change_payment_type' => 'Change Payment Type',
+        'cancel_shipment' => 'Cancel Shipments',
+        'shipments_export' => 'Export Shipments',
+        'shipment_change_status' => 'Change Shipment Status',
+        'shipment_escalate' => 'Escalate Shipment',
+        'ekart_enable' => 'Update Shipment Details',
+        'bd_escalation_delivery_shipments' => 'Bluedart Escalate Delivery Shipment'
+    ),
+    'cargo_shipments' => array(
+        'cargo_shipments' => 'View Shipments',
+        'cargo_cancel_shipment' => 'Cancel Shipments',
+        'cargo_shipments_export' => 'Export Shipments',
+        'cargo_shipment_escalate' => 'Escalate Shipment',
+    ),
+    'ndr' => array(
+        'ndr' => 'View NDR',
+        'ndr_export' => 'Export NDR',
+    ),
+    // 'escalations' => array(
+    //     'esc_global_view' => 'View All Internal Escalations',
+    // ),
+    'users' => array(
+        'users' => 'Users',
+        'users_login' => 'Login to User Account',
+        'users_verify' => 'Verify User',
+        'users_export' => 'Export Users',
+        'users_edit_details' => 'Modify Seller Details',
+        'users_bank_details' => 'Modify Bank Details',
+        'users_kyc_details' => 'Modify KYC Details',
+        'users_referral_details' => 'Change Referral Settings',
+        'users_remittance_cycle' => 'Update Remittance Cycle',
+        'users_wallet_limit' => 'Adjust Wallet Limit',
+        'users_pricing_plan' => 'Change Pricing Plan',
+        'cargo_users_pricing_plan' => 'Cargo Change Pricing Plan',
+        'users_international_pricing_plan' => 'Change International Pricing Plan',
+        'users_account_manager' => 'Assign Account Manager',
+        'users_sales_manager' => 'Assign Sales Manager',
+        'change_sales_manager' => 'Change Sales Manager',
+        'users_push_to_leadsquared' => 'Push to LeadSquared',
+        'users_duplicate_list' => 'View Duplicate Users',
+        'update_lead_source' => 'Update Lead Source',
+        'update_invoice_mode' => 'Update Invoice Mode',
+        'update_ivr_chargeable' => 'Update Ivr Chargeable',
+        'user_category_update' => 'Update Seller Category & Cluster',
+        'users_tag' => 'User Tags',
+        'whatsapp_enable'       => 'Whatsapp Enable',
+        'enable_tat_management' => 'Enable Weight Tat Management',
+        'users_int_sales_manager' => 'Assign International Sales Manager',
+        'change_int_sales_manager' => 'Change International Sales Manager',
+        'legal_details_edit'       => 'Edit Legal Details',
+        "wallet_adjustment_cycle"  => 'Update Wallet Adjustment Cycle',
+        "remittance_term" => 'Update Remittance Term',
+        "early_cod_charges" => 'Update Early Cod Charges',
+        "log_history" => 'Log History',
+        'b2b_sales_manager' => 'Assign B2B Sales Manager',
+        'change_b2b_sales_manager' => 'Change B2b Sales Manager',
+        'users_training_manager' => 'Assign Training Manager',
+        'change_training_manager' => 'Change Training Manager',
+        "account_master" => 'Set Account Master'
+    ),
+    'weight' => array(
+        'weight' => 'Weight Rec.',
+        'weight_upload' => 'Weight Upload',
+        'manage_weight' => 'Manage Weight',
+        'weight_apply' => 'Apply Weight',
+        'weight_revert_charges' => 'Revert Weight Charges',
+        'weight_close_dispute' => 'Close Disputes',
+        'weight_credit_notes' => 'Issue Credit Note',
+        'weight_pending' => 'View Pending Weight',
+        'weight_freeze' => 'View Weight Freeze',
+        'weight_freeze_edit_before_approved' => 'Edit weight before approved',
+        'weight_freeze_edit' => 'Edit weight',
+        'manage_weight_export_image'=> 'Export manage weight image'
+
+
+    ),
+    'billing' => array(
+        'billing' => 'Access Billing Section',
+        'billing_recharge_logs' => 'Recharge Logs',
+        'billing_recharge_logs_export' => 'Recharge Logs Export',
+        'billing_shipping_charges' => 'Shipping Charges',
+        'billing_shipping_charges_export' => 'Shipping Charges Export',
+        'billing_invoices' => 'Invoices',
+        'billing_invoices_export' => 'Export Invoices',
+        'billing_generate_invoice' => 'Generate Invoice',
+        'billing_wallet_adjustment' => 'Wallet Adjustments',
+        'billing_wallet_shipment' => 'Wallet Shipment Adjustments',
+        'billing_consolidated_wallet' => 'Consolidated Wallet',
+        'billing_neft_recharge' =>  'NEFT Recharge',
+        'freight_reversal' => 'Freight Reversal',
+        'wallet_to_bank_transfer' => 'Wallet to Bank Transfer',
+
+    ),
+    // 'Lost & Damaged CN' => array(
+       
+    //     'lost_damaged_cn' => 'Lost & Damaged CN',
+        
+    // ),
+    'remittance' => array(
+        'remittance' => 'View Remittance Section',
+        'remittance_receipt_upload' => 'Receipt Upload',
+        'remittance_receipt_history' => 'Receipt History',
+        'remittance_receipt_export' => 'Receipt History Export',
+        'remittance_analysis' => 'Remittance Analysis',
+        'create_remittance' => 'Create Remittance',
+        'remittance_history' => 'Remittance History',
+        'remittance_history_export' => 'Remittance History Export',
+        'remittance_courier_expected' => 'Courier Expected Dues',
+        'remittance_payable_export' => 'Remittance Payable Export'
+    ),
+    'remittance_new' => array(
+        'remittance_new' => 'Remittance Menu',
+        'seller_payable_export' => 'Seller Payable Export',
+        'seller_remittance_import' => 'Import Remittance'
+    ),
+    'lost_damaged' => array(
+        'lost_damaged' => 'View Lost Damaged Section',
+        'lost_damaged_mark' => 'Mark Lost & Damaged',
+        'lost_damaged_courier_receipt' => 'Upload Courier Receipt',
+        'lost_damaged_issue' => 'Issue CN To Seller',
+        'lost_damaged_list' => 'Lost & Damaged List',
+        'lost_damaged_courier_expected' => 'Courier Expected',
+    ),
+    'courier_mis' => array(
+        'view_awb_operations' => 'View Awb',
+        'awb_mismatch_export' => 'AWB Export(Mismatch)',
+        'awb_match_export' => 'AWB Export(Match)',
+        'awb_verify' => 'AWB Verify (COD)',
+    ),
+    'pickups' => array(
+        'pickups' => 'View Pickups',
+        'pickups_export' => 'Export Pickups',
+        'pickups_escalate' => 'Escalate Pickup',
+    ),
+    'pincodes' => array(
+        'pincodes' => 'View Pincodes',
+        'pincodes_export' => 'Export Pincodes',
+        'import_pincodes' => 'Import Pincodes',
+    ),
+    'control tower' => array(
+        'control_tower' => 'Control Tower',
+        'stuck_shipments' => 'Stuck Shipments',
+    ),
+    'reports' => array(
+        'reports' => 'Reports',
+        'salesreports' => 'Sales Dashboard',
+        'sales_export'  => 'Sales Dashboard Export',
+        'seller_report' => 'Seller Report',
+        'kam_report' => 'Kam Report',
+    ),
+    'marketing' => array(
+        'marketing' => 'Marketing Dashboard',
+    ),
+    'user courier' => array(
+        'enable_seller_courier' => 'Enable Disable Courier for Seller',
+        'seller_courier_allocation' => 'Seller Courier Allocation',
+    ),
+    'pricing plans' => array(
+        'plans_view' => 'View Plans Section',
+        'plans_view_price' => 'View Price',
+        'plans_create' => 'Create/Edit/Upload Price',
+        'plans_edit_landing' => 'Edit Landing',
+        'plan_users_count' => 'Plans Users Count',
+        'smart_plans_allocation_rule' => 'Smart Pricing Rules',
+        'plans_export' => 'Plans Export',
+        'plans_user_count' => 'Plans Count Export',
+        'export_margin' => 'Margin Export',
+        'export_landing' => 'Landing Export',
+    ), 
+    'cargo_plans_view' => array(
+        'cargo_plans_view' => 'View Plans Section',
+        'cargo_plans_view_price' => 'View Price',
+        'cargo_plans_create' => 'Create/Edit Price',
+        'cargo_plans_import_landing' => 'Import Landing Price',
+        'cargo_plans_edit_landing' => 'Edit Landing',
+        'cargo_plan_users_count' => 'Plans Users Count',
+        'cargotariff' => 'Cargo Tariff Rate List',
+    ),
+    'staff' => array(
+        'staff' => 'Manage Admins',
+    ),
+    /*'international_orders' => array(
+        'international_orders' => 'View Orders',
+        'international_orders_export' => 'Export Orders',
+    ),
+    'international_shipments' => array(
+        'international_shipments' => 'View Shipments',
+        'international_change_payment_type' => 'Change Payment Type',
+        'international_cancel_shipment' => 'Cancel Shipments',
+        'international_shipments_export' => 'Export Shipments',
+        'international_shipment_change_status' => 'Change Shipment Status',
+        'international_shipment_escalate' => 'Escalate Shipment',
+    ),*/
+    'international_pricing plans' => array(
+        'international_plans_view' => 'View Plans Section',
+        'international_plans_view_price' => 'View Price',
+        'international_plans_create' => 'Create/Edit/Import Price',
+        'international_plans_import_landing' => 'Import Landing Price',
+        'international_plans_edit_landing' => 'Edit Landing',
+        'international_plan_users_count' => 'Plans Users Count',
+        'international_plan_users_permission' => 'Users Permission',
+    ),
+    'coupon' => array(
+        'enable_coupon_view' => 'View Coupon Section',
+        'enable_coupon_create' => 'Create/Edit Coupon',
+    ),
+    'kyc' => array(
+        'international_kyc' => 'International KYC'
+    ),
+    'international_pincodes' => array(
+        'international_pincodes' => 'View Pincodes',
+        'international_pincodes_export' => 'Export Pincodes',
+        'international_import_pincodes' => 'Import Pincodes',
+    ),
+    'International Shipping Enquiry' => array(
+        'enableinternational_shipping_enquery' => 'Enable International Shipping Enquiry',
+        // 'enable_coupon_create' => 'Create/Edit Coupon',
+    ),
+    'Bank Verification' => array(
+        'bank_verification' => 'Verify Bank Details',
+    ),
+    'cargo_pincodes' => array(
+        'cargo_pincodes' => 'View Pincodes',
+        'cargo_pincodes_export' => 'Export Pincodes',
+        'cargo_import_pincodes' => 'Import Pincodes',
+    )
+);

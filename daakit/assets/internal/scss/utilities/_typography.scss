@@ -1,0 +1,358 @@
+/*--typography--*/
+.text-wrap {
+	font-size: 14px;
+	line-height: 1.66;
+	> {
+		:first-child {
+			margin-top: 0;
+		}
+		:last-child {
+			margin-block-end: 0;
+		}
+		h1, h2, h3, h4, h5, h6 {
+			margin-top: 1em;
+		}
+	}
+}
+.fw-600 {
+	font-weight: 600;
+}
+.fw-500 {
+	font-weight: 500;
+}
+.fs-10 {
+	font-size: 10px !important;
+}
+.op-1 {
+	opacity: 1 !important;
+}
+.op-6 {
+	opacity: 0.6 !important;
+}
+.fs-11 {
+	font-size: 11px !important;
+}
+.fs-12 {
+	font-size: 12px !important;
+}
+.fs-13 {
+	font-size: 13px !important;
+}
+.fs-14 {
+	font-size: 14px !important;
+}
+.fs-15 {
+	font-size: 15px;
+}
+.fs-16 {
+	font-size: 16px;
+}
+.fs-17 {
+	font-size: 17px;
+}
+.fs-18 {
+	font-size: 18px !important;
+}
+.fs-19 {
+	font-size: 19px;
+}
+.fs-20 {
+	font-size: 20px !important;
+}
+.fs-23 {
+	font-size: 23px !important;
+}
+.fs-24 {
+	font-size: 24px !important;
+}
+.fs-25 {
+	font-size: 25px !important;
+}
+.fs-30 {
+	font-size: 30px !important;
+}
+.fs-40 {
+	font-size: 40px;
+}
+.fs-50 {
+	font-size: 50px;
+}
+/*------- Alignments & values-------*/
+
+.text-monospace {
+	font-family: Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+}
+.text-justify {
+	text-align: justify !important;
+}
+.text-nowrap {
+	white-space: nowrap !important;
+}
+.text-truncate {
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+.text-left {
+	text-align: left !important;
+}
+.text-right {
+	text-align: right !important;
+}
+.text-center {
+	text-align: center !important;
+}
+@media (min-width: 576px) {
+	.text-sm-left {
+		text-align: left !important;
+	}
+	.text-sm-right {
+		text-align: right !important;
+	}
+	.text-sm-center {
+		text-align: center !important;
+	}
+}
+@media (min-width: 768px) {
+	.text-md-left {
+		text-align: left !important;
+	}
+	.text-md-right {
+		text-align: right !important;
+	}
+	.text-md-center {
+		text-align: center !important;
+	}
+}
+@media (min-width: 992px) {
+	.text-lg-left {
+		text-align: left !important;
+	}
+	.text-lg-right {
+		text-align: right !important;
+	}
+	.text-lg-center {
+		text-align: center !important;
+	}
+}
+@media (min-width: 1280px) {
+	.text-xl-left {
+		text-align: left !important;
+	}
+	.text-xl-right {
+		text-align: right !important;
+	}
+	.text-xl-center {
+		text-align: center !important;
+	}
+}
+.text-lowercase {
+	text-transform: lowercase !important;
+}
+.text-uppercase {
+	text-transform: uppercase !important;
+}
+.text-capitalize {
+	text-transform: capitalize !important;
+}
+.font-weight-light {
+	font-weight: 300 !important;
+}
+.fw-normal {
+	font-weight: 400 !important;
+}
+.fw-semibold {
+	font-weight: 600 !important;
+}
+.fw-bold {
+	font-weight: 700 !important;
+}
+.font-italic {
+	font-style: italic !important;
+}
+.text-white {
+	color: $white !important;
+}
+.text-white-transparent {
+	color: $white !important;
+	opacity: 0.9;
+}
+.text-white-transparent-1 {
+	color: $white !important;
+	opacity: 0.5;
+}
+.text-success {
+	color: $success !important;
+}
+a.text-success {
+	&:hover, &:focus {
+		color: #448700 !important;
+	}
+}
+.text-info {
+	color: $info !important;
+}
+a.text-info {
+	&:hover, &:focus {
+		color: #1594ef !important;
+	}
+}
+.text-warning {
+	color: $warning !important;
+}
+a.text-warning {
+	&:hover, &:focus {
+		color: #c29d0b !important;
+	}
+}
+.text-danger {
+	color: $danger !important;
+}
+a.text-danger {
+	&:hover, &:focus {
+		color: #d22827 !important;
+	}
+}
+.text-light {
+	color: #ebedef !important;
+}
+a.text-light {
+	&:hover, &:focus {
+		color: #dae0e5 !important;
+	}
+}
+.text-dark {
+	color: $default-color !important;
+}
+a.text-dark {
+	&:hover, &:focus {
+		color: #7b6fe0 !important;
+	}
+}
+.text-body {
+	color: #495057 !important;
+}
+.text-default-body {
+	color: #323c53 !important;
+}
+.text-muted {
+	color: $muted !important;
+}
+.text-black-50 {
+	color: $black-5 !important;
+}
+.text-hide {
+	font: 0/0 a;
+	color: transparent;
+	text-shadow: none;
+	background-color: transparent;
+	border: 0;
+}
+.visible {
+	visibility: visible !important;
+}
+.invisible {
+	visibility: hidden !important;
+}
+.clearfix::after {
+	display: block;
+	clear: both;
+	content: "";
+}
+.embed-responsive {
+	position: relative;
+	display: block;
+	width: 100%;
+	padding: 0;
+	overflow: hidden;
+	&::before {
+		display: block;
+		content: "";
+	}
+	.embed-responsive-item, iframe, embed, object, video {
+		position: absolute;
+		inset-block: 0;
+		inset-inline-start: 0;
+		width: 100%;
+		height: 100%;
+		border: 0;
+	}
+}
+.embed-responsive-21by9::before {
+	padding-block-start: 42.85714286%;
+}
+.embed-responsive-16by9::before {
+	padding-block-start: 56.25%;
+}
+.embed-responsive-4by3::before {
+	padding-block-start: 75%;
+}
+.embed-responsive-1by1::before {
+	padding-block-start: 100%;
+}
+.text-primary {
+	color: #{$primary} !important;
+}
+a.text-primary {
+	&:hover, &:focus {
+		color: #{$primary} !important;
+	}
+}
+.text-secondary {
+	color: $secondary !important;
+}
+a.text-secondary {
+	&:hover, &:focus {
+		color: $secondary !important;
+	}
+}
+.text-primary-gradient {
+	background: linear-gradient(to right bottom, #{$primary} 0%, #635cc5 100%);
+	background: linear-gradient(to right bottom, #{$primary} 0%, #635cc5 100%);
+}
+.text-secondary-gradient {
+	background: linear-gradient(to right, $secondary 0%, #79f1e9 100%);
+}
+
+.heading-primary {
+	background-color: #{$primary};
+	color: $custom-white;
+	padding: 5px;
+	border-radius: $card-border-radius;
+}
+.heading-success {
+    background-color: $success;
+    color: $custom-white;
+    padding: 5px;
+	border-radius: $card-border-radius;
+}
+.heading-secondary {
+    background-color: $secondary;
+    color: $custom-white;
+    padding: 5px;
+	border-radius: $card-border-radius;
+}
+.heading-info {
+    background-color: $info;
+    color: $custom-white;
+    padding: 5px;
+	border-radius: $card-border-radius;
+}
+.heading-warning {
+    background-color: $warning;
+    color: $custom-white;
+    padding: 5px;
+	border-radius: $card-border-radius;
+}
+.heading-danger {
+    background-color: $danger;
+    color: $custom-white;
+    padding: 5px;
+	border-radius: $card-border-radius;
+}
+.heading-inverse {
+    background-color: #333;
+    color: $custom-white;
+    padding: 5px;
+	border-radius: $card-border-radius;
+}

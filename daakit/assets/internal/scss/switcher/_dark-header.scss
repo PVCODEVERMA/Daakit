@@ -1,0 +1,25 @@
+[data-header-style="dark"] {
+    .app-header {
+        --header-bg: #28273a; 
+        --border: rgba(255, 255, 255, 0.06);
+    }
+    .responsive-logo .main-logo .desktop-logo {
+        display: block;
+
+        &.desktop-logo-dark {
+            display: none;
+        }
+    }
+    .nav-link.icon {
+        color: rgba(255, 255, 255, 0.7);
+        svg {
+            fill: rgba(255, 255, 255, 0.7);
+        }
+        &.active, &:focus, &:hover {
+            color: $custom-white;
+            svg {
+                fill: $custom-white;
+            }
+        }
+    }
+}
