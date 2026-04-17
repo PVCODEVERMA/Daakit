@@ -1,4 +1,0 @@
-// ______________ mCustomScrollbar
-$(".vscroll").mCustomScrollbar();
-	
-	

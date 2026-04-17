@@ -776,7 +776,7 @@
                                         class="w-14 h-14 sm:w-16 sm:h-16 bg-[#A7F3C0] rounded-[18px] flex items-center justify-center">
                                         <div
                                             class="w-8 h-8 sm:w-10 sm:h-10 bg-[#15803D] rounded-full flex items-center justify-center text-white">
-                                             <svg class="w-5 h-5 sm:w-6 sm:h-6" viewBox="0 0 24 24" fill="none"
+                                            <svg class="w-5 h-5 sm:w-6 sm:h-6" viewBox="0 0 24 24" fill="none"
                                                 stroke="currentColor" stroke-width="2.8" stroke-linecap="round"
                                                 stroke-linejoin="round">
                                                 <polyline points="20 7 10 17 5 12" />
