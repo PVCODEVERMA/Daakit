@@ -1907,7 +1907,7 @@
 
     .review-docs-grid {
       display: grid;
-      grid-template-columns: 1fr 1fr;
+      grid-template-columns: repeat(3, 1fr);
       gap: 20px;
       margin-bottom: 24px;
     }
@@ -2486,7 +2486,7 @@
 
     @media (max-width: 600px) {
       .review-grid, .review-docs-grid {
-        grid-template-columns: 1fr 1fr !important;
+        grid-template-columns: 1fr !important;
         gap: 10px !important;
       }
       .review-card {
@@ -3064,7 +3064,7 @@
       <h1 class="page-title">Verify Your Information</h1>
       <p class="page-sub">Review your documents and confirm the details</p>
 
-      <div id="reviewDocsGrid">
+      <div class="review-docs-grid" id="reviewDocsGrid">
         <!-- JS injects here -->
       </div>
 

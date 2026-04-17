@@ -131,9 +131,10 @@
       line-height: 1.4;
     }
 
-    .review-grid {
+    .review-grid,
+    .review-docs-grid {
       display: grid;
-      grid-template-columns: 1fr 1fr;
+      grid-template-columns: repeat(2, 1fr);
       gap: 20px;
       margin: 24px 0;
     }
@@ -238,7 +239,7 @@
 
       .review-grid,
       .review-docs-grid {
-        grid-template-columns: 1fr 1fr !important;
+        grid-template-columns: 1fr !important;
         gap: 10px !important;
       }
 
@@ -2061,12 +2062,7 @@
       font-style: italic;
     }
 
-    .review-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 20px;
-      margin: 24px 0;
-    }
+
 
     /* Custom Image Match CSS */
     .selfie-row {
@@ -2244,6 +2240,11 @@
       border: 1px solid var(--gray-100);
       border-radius: 6px;
       padding: 6px 10px;
+    }
+
+    .dpc-val.active {
+      color: var(--gray-900);
+      font-weight: 600;
     }
 
     .info-box-new {
@@ -3118,7 +3119,7 @@
       <h1 class="page-title">Verify Your Information</h1>
       <p class="page-sub">Review your documents and confirm the details</p>
 
-      <div id="reviewContainer">
+      <div class="review-docs-grid" id="reviewContainer">
         <!-- JS injects here -->
       </div>
 
@@ -3841,7 +3842,7 @@
       const addrAddrVal = document.getElementById('addrAddr')?.value || '';
       const addrDobVal = document.getElementById('addrDob')?.value || '';
 
-      const val = (v) => v ? `<div class="review-value">${escapeHTML(v)}</div>` : `<div class="review-value placeholder">As per document</div>`;
+      const val = (v) => v ? `<div class="dpc-val active">${escapeHTML(v)}</div>` : `<div class="dpc-val">As per document</div>`;
 
       const container = document.getElementById('reviewContainer');
       if (!container) return;
@@ -3892,72 +3893,52 @@
           </div>
         </div>
 
-        <div class="review-grid">
+        <div class="review-grid" style="grid-column: 1 / -1;">
           <!-- Card 1: PAN Card -->
-          <div class="review-card">
-            <div class="review-check" style="position:absolute; top:20px; right:20px;">
-              ${svgCheck}
-            </div>
-            <div class="review-card-head">
-              <div class="review-doc-title">
-                <div class="review-doc-icon" style="background:none;">
-                   ${svgDocHeader}
+          <div class="review-card doc-preview-card">
+            <div class="dpc-head">
+              <div class="dpc-head-left">
+                <div class="dpc-icon-box">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14,2 14,8 20,8"/></svg>
                 </div>
-                PAN Card
+                <div class="dpc-title">PAN Card</div>
+              </div>
+              <div class="dpc-check">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><path d="M9 12l2 2 4-4"/></svg>
               </div>
             </div>
-            <div class="review-img-box">
-               ${svgDocBody}
+            <div class="dpc-thumb">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14,2 14,8 20,8"/></svg>
             </div>
-            <div style="text-align:center; font-size:11px; color:var(--gray-500); margin-top:-8px; margin-bottom:16px; font-weight:500;">pancard.png</div>
-            <div class="review-details">
-              <div class="review-row">
-                <div class="review-label">PAN Number</div>
-                <div class="review-value">${val(panNumVal)}</div>
-              </div>
-              <div class="review-row">
-                <div class="review-label">Full Name</div>
-                <div class="review-value">${val(panNameVal)}</div>
-              </div>
+            <div class="dpc-thumb-lbl">pancard.png</div>
+            <div class="dpc-fields">
+              <div class="dpc-dl"><div class="dpc-lbl">PAN Number</div>${val(panNumVal)}</div>
+              <div class="dpc-dl"><div class="dpc-lbl">Full Name</div>${val(panNameVal)}</div>
             </div>
           </div>
 
           <!-- Card 2: Address Proof -->
-          <div class="review-card">
-            <div class="review-check" style="position:absolute; top:20px; right:20px;">
-              ${svgCheck}
-            </div>
-            <div class="review-card-head">
-              <div class="review-doc-title">
-                <div class="review-doc-icon" style="background:none;">
-                   ${svgDocHeader}
+          <div class="review-card doc-preview-card">
+            <div class="dpc-head">
+              <div class="dpc-head-left">
+                <div class="dpc-icon-box">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14,2 14,8 20,8"/></svg>
                 </div>
-                ${addrLabel}
+                <div class="dpc-title">${addrLabel}</div>
+              </div>
+              <div class="dpc-check">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><path d="M9 12l2 2 4-4"/></svg>
               </div>
             </div>
-            <div class="review-img-box">
-               ${svgDocBody}
+            <div class="dpc-thumb">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14,2 14,8 20,8"/></svg>
             </div>
-            <div style="text-align:center; font-size:11px; color:var(--gray-500); margin-top:-8px; margin-bottom:16px; font-weight:500;">${addrLabel.toLowerCase().replace(' ', '_')}.png</div>
-            <div class="review-details">
-              <div class="review-row">
-                <div class="review-label">Document Number</div>
-                <div class="review-value">${val(addrNumVal)}</div>
-              </div>
-              <div class="review-row">
-                <div class="review-label">Full Name</div>
-                <div class="review-value">${val(addrNameVal)}</div>
-              </div>
-              ${addrAddrVal ? `
-              <div class="review-row">
-                <div class="review-label">Address</div>
-                <div class="review-value">${val(addrAddrVal)}</div>
-              </div>` : ''}
-              ${addrDobVal ? `
-              <div class="review-row">
-                <div class="review-label">DOB</div>
-                <div class="review-value">${val(addrDobVal)}</div>
-              </div>` : ''}
+            <div class="dpc-thumb-lbl">${addrLabel.toLowerCase().replace(' ', '_')}.png</div>
+            <div class="dpc-fields">
+              <div class="dpc-dl"><div class="dpc-lbl">ID Number</div>${val(addrNumVal)}</div>
+              <div class="dpc-dl"><div class="dpc-lbl">Name</div>${val(addrNameVal)}</div>
+              ${addrAddrVal ? `<div class="dpc-dl"><div class="dpc-lbl">Address</div>${val(addrAddrVal)}</div>` : ''}
+              ${addrDobVal ? `<div class="dpc-dl"><div class="dpc-lbl">DOB</div>${val(addrDobVal)}</div>` : ''}
             </div>
           </div>
         </div>

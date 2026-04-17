@@ -2007,7 +2007,7 @@
 
     .review-docs-grid {
       display: grid;
-      grid-template-columns: 1fr 1fr;
+      grid-template-columns: repeat(3, 1fr);
       gap: 20px;
       margin-bottom: 24px;
     }
@@ -2588,7 +2588,7 @@
 
       .review-grid,
       .review-docs-grid {
-        grid-template-columns: 1fr 1fr !important;
+        grid-template-columns: 1fr !important;
         gap: 10px !important;
       }
 
@@ -3069,7 +3069,7 @@
                   <path d="M7 11V7a5 5 0 0 1 10 0v4" />
                 </svg></div>
               <div>
-                <div class="doc-title">Business/Address Proof <span class="badge-mandatory">Mandatory</span></div>
+                <div class="doc-title" id="businessProofTitle">Business/Address Proof <span class="badge-mandatory">Mandatory</span></div>
                 <div class="doc-subtitle">Valid Business Registration Proof</div>
               </div>
             </div>
@@ -3183,7 +3183,7 @@
     <div class="screen" id="screen-review">
       <h1 class="page-title">Review Documents</h1>
       <p class="page-sub">Please review the details below before final submission</p>
-      <div id="reviewDocsGrid">
+      <div class="review-docs-grid" id="reviewDocsGrid">
         <!-- JS injects here -->
       </div>
       <div class="action-row center">
@@ -3604,28 +3604,39 @@
     /* ── ADDR DOC TYPE ── */
     function onAddrTypeChange() {
       const type = document.getElementById('addrDocType').value;
-      const uploadZone = document.getElementById('addrUploadZone');
+      const uploadZone = document.getElementById('soleAddrUploadZone');
       const label = document.getElementById('addrUploadLabel');
-      const fileRow = document.getElementById('addrFileRow');
-      const form = document.getElementById('addrForm');
-      const scanRow = document.getElementById('addrScanRow');
+      const fileRow = document.getElementById('soleAddrFileRow');
+      const form = document.getElementById('soleAddrForm');
+      const docTitleEl = document.getElementById('businessProofTitle');
+      const formTitleEl = document.getElementById('soleAddrFormTitle');
+
       if (!type) {
         uploadZone.style.display = 'none';
         fileRow.innerHTML = ''; form.style.display = 'none';
         addrUploaded = false; addrScanned = false;
-        document.getElementById('addrCheck').style.display = 'none';
-        document.getElementById('addressCard').classList.remove('completed');
-        document.getElementById('addrIconEl').classList.remove('green');
+        document.getElementById('soleAddrCheck').style.display = 'none';
+        document.getElementById('soleAddrCard').classList.remove('completed');
+        document.getElementById('soleAddrIconEl').classList.remove('green');
         checkManualReady(); return;
       }
-      const labelMap = { aadhaar: 'Aadhaar Card', voter: 'Voter ID Card', passport: 'Passport', utility: 'Utility Bill' };
-      label.textContent = `Click to upload ${labelMap[type]}`;
+
+      const labelMap = { 
+        shop: 'Shop Establishment Cert.', 
+        udyam: 'UDYAM Aadhaar' 
+      };
+      
+      const selectedLabel = labelMap[type] || 'Business/Address Proof';
+      label.textContent = `Click to upload ${selectedLabel}`;
+      if(docTitleEl) docTitleEl.innerHTML = `${selectedLabel} <span class="badge-mandatory">Mandatory</span>`;
+      if(formTitleEl) formTitleEl.textContent = `${selectedLabel} Details`;
+
       uploadZone.style.display = 'block';
       fileRow.innerHTML = ''; form.style.display = 'none'; form.innerHTML = '';
       addrUploaded = false; addrScanned = false;
-      document.getElementById('addrCheck').style.display = 'none';
-      document.getElementById('addressCard').classList.remove('completed');
-      document.getElementById('addrIconEl').classList.remove('green');
+      document.getElementById('soleAddrCheck').style.display = 'none';
+      document.getElementById('soleAddrCard').classList.remove('completed');
+      document.getElementById('soleAddrIconEl').classList.remove('green');
       checkManualReady();
     }
 
@@ -3873,6 +3884,8 @@
       const addrNumVal = document.getElementById('addrNum')?.value || '';
       const addrNameVal = document.getElementById('addrName')?.value || '';
       const addrStateVal = document.getElementById('addrState')?.value || '';
+      const gstNumVal = document.getElementById('gstNumber')?.value || '';
+      const gstNameVal = document.getElementById('gstName')?.value || '';
 
       const val = (v) => v ? `<div class="review-value">${escapeHTML(v)}</div>` : `<div class="review-value placeholder">As per document</div>`;
 
@@ -3949,6 +3962,28 @@
         <div class="dpc-dl"><div class="dpc-lbl">Registration Number</div>${val(addrNumVal)}</div>
         ${addrNameVal ? `<div class="dpc-dl"><div class="dpc-lbl">Entity Name</div>${val(addrNameVal)}</div>` : ''}
         ${addrStateVal ? `<div class="dpc-dl"><div class="dpc-lbl">State Code</div>${val(addrStateVal)}</div>` : ''}
+      </div>
+    </div>
+    
+    <div class="review-card doc-preview-card">
+      <div class="dpc-head">
+        <div class="dpc-head-left">
+          <div class="dpc-icon-box">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14,2 14,8 20,8"/></svg>
+          </div>
+          <div class="dpc-title">GST Registration</div>
+        </div>
+        <div class="dpc-check">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><path d="M9 12l2 2 4-4"/></svg>
+        </div>
+      </div>
+      <div class="dpc-thumb">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14,2 14,8 20,8"/></svg>
+      </div>
+      <div class="dpc-thumb-lbl">gst_registration.png</div>
+      <div class="dpc-fields">
+        <div class="dpc-dl"><div class="dpc-lbl">GSTIN</div>${val(gstNumVal)}</div>
+        <div class="dpc-dl"><div class="dpc-lbl">Legal Name</div>${val(gstNameVal)}</div>
       </div>
     </div>`;
     }

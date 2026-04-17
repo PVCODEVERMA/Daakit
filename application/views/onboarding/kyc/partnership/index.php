@@ -1907,9 +1907,16 @@
 
     .review-docs-grid {
       display: grid;
-      grid-template-columns: 1fr 1fr;
+      grid-template-columns: repeat(4, 1fr);
       gap: 20px;
       margin-bottom: 24px;
+    }
+
+    /* Laptop Breakpoint */
+    @media (max-width: 1400px) {
+      .review-grid, .review-docs-grid {
+        grid-template-columns: repeat(2, 1fr) !important;
+      }
     }
 
     /* Custom Image Match CSS */
@@ -2486,7 +2493,7 @@
 
     @media (max-width: 600px) {
       .review-grid, .review-docs-grid {
-        grid-template-columns: 1fr 1fr !important;
+        grid-template-columns: 1fr !important;
         gap: 10px !important;
       }
       .review-card {
@@ -3117,7 +3124,7 @@
       <h1 class="page-title">Verify Your Information</h1>
       <p class="page-sub">Review your documents and confirm the details</p>
 
-      <div id="reviewDocsGrid">
+      <div class="review-docs-grid" id="reviewDocsGrid">
         <!-- JS injects here -->
       </div>
 
@@ -3933,8 +3940,8 @@
       </div>
       <div class="dpc-thumb-lbl">gst_registration.png</div>
       <div class="dpc-fields">
-        <div class="dpc-dl"><div class="dpc-lbl">GST Number</div>${val(gstNum)}</div>
-        <div class="dpc-dl"><div class="dpc-lbl">Legal Name</div>${val(gstName)}</div>
+        <div class="dpc-dl"><div class="dpc-lbl">GST Number</div>${val(gstNumVal)}</div>
+        <div class="dpc-dl"><div class="dpc-lbl">Legal Name</div>${val(gstNameVal)}</div>
       </div>
     </div>
 
@@ -3955,7 +3962,7 @@
       </div>
       <div class="dpc-thumb-lbl">partnership_deed.png</div>
       <div class="dpc-fields">
-        <div class="dpc-dl"><div class="dpc-lbl">Agreement Number</div>${val(deedNum)}</div>
+        <div class="dpc-dl"><div class="dpc-lbl">Agreement Number</div>${val(deedNumVal)}</div>
       </div>
     </div>`;
     }
